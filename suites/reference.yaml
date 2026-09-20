@@ -1,0 +1,288 @@
+# Reference suite for the built-in reference agent.
+#
+# Runs with no API key and no network. Every grader in the registry is
+# exercised by at least one task, so `caliper run suites/reference.yaml`
+# doubles as an integration test of the grading layer.
+#
+# Tasks are authored against the CORRECT answer, not against what either agent
+# version happens to produce. That is the only way the comparison means
+# anything.
+
+suite: reference
+defaults:
+  timeout_s: 15
+  difficulty: easy
+  cost_budget_usd: 0.004
+  latency_budget_s: 5.0
+
+tasks:
+
+  # --- arithmetic: exact numeric answers, minimal trajectories -------------
+
+  - id: add_two_numbers
+    input: "What is 17 plus 25?"
+    expected: "42"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - step_efficiency
+      - no_redundant_calls
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic, core]
+
+  - id: subtract_numbers
+    input: "What is 1000 minus 373?"
+    expected: "627"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - no_redundant_calls
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic, core]
+
+  - id: multiply_numbers
+    input: "What is 23 multiplied by 19?"
+    expected: "437"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - step_efficiency
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic]
+
+  - id: divide_numbers
+    input: "What is 144 divided by 12?"
+    expected: "12"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - tool_choice_precision
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic]
+
+  - id: percent_of
+    input: "What is 15 percent of 240?"
+    expected: "36"
+    grader:
+      - numeric_tolerance: {rel: 0.001}
+      - step_efficiency
+      - cost_budget
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic]
+
+  - id: square_number
+    input: "What is 13 squared?"
+    expected: "169"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - no_redundant_calls
+    expected_tools: [calculator]
+    reference_steps: 2
+    tags: [arithmetic]
+
+  - id: relative_tolerance_pi
+    input: "What is 22 divided by 7?"
+    expected: "3.142857"
+    grader:
+      - numeric_tolerance: {rel: 0.001}
+    expected_tools: [calculator]
+    reference_steps: 2
+    difficulty: medium
+    tags: [arithmetic, tolerance]
+
+  # --- knowledge-base lookup: single tool call ----------------------------
+
+  - id: capital_of_france
+    input: "What is the capital of France?"
+    expected: "Paris"
+    grader:
+      - exact_match
+      - tool_choice_precision
+      - step_efficiency
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup, core]
+
+  - id: capital_of_kenya
+    input: "What is the capital of Kenya?"
+    expected: "Nairobi"
+    grader: exact_match
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup]
+
+  - id: largest_ocean
+    input: "What is the largest ocean?"
+    expected: "Pacific Ocean"
+    grader:
+      - exact_match
+      - latency_budget
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup]
+
+  - id: longest_river
+    input: "What is the longest river?"
+    expected: "Nile"
+    grader:
+      - contains_all: {terms: [Nile]}
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup]
+
+  - id: speed_of_light
+    input: "What is the speed of light?"
+    expected: "299792458 m/s"
+    grader:
+      - regex_match: {pattern: "299[,]?792[,]?458"}
+      - tool_choice_precision
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup, regex]
+
+  - id: seconds_in_a_day
+    input: "What is the number of seconds in a day?"
+    expected: "86400"
+    grader:
+      - numeric_tolerance: {abs: 0.5}
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup]
+
+  - id: currency_of_japan
+    input: "What is the currency of Japan?"
+    expected: "yen"
+    grader:
+      - exact_match
+      - no_redundant_calls
+    expected_tools: [lookup]
+    reference_steps: 2
+    tags: [lookup]
+
+  # --- string operations on a supplied literal ----------------------------
+
+  - id: reverse_literal
+    input: "Reverse the string 'caliper'"
+    expected: "repilac"
+    grader:
+      - exact_match: {case_sensitive: true}
+      - step_efficiency
+    expected_tools: [string_op]
+    reference_steps: 2
+    tags: [string, core]
+
+  - id: uppercase_literal
+    input: "Convert the string 'regression' to uppercase"
+    expected: "REGRESSION"
+    grader:
+      - exact_match: {case_sensitive: true}
+      - tool_choice_precision
+    expected_tools: [string_op]
+    reference_steps: 2
+    tags: [string]
+
+  - id: word_count_literal
+    input: "How many words are in 'the quick brown fox jumps'?"
+    expected: "5"
+    grader:
+      - numeric_tolerance: {abs: 0.5}
+      - step_efficiency
+    expected_tools: [string_op]
+    reference_steps: 2
+    tags: [string]
+
+  - id: title_case_literal
+    input: "Convert the string 'trajectory grading' to title case"
+    expected: "Trajectory Grading"
+    grader:
+      - exact_match: {case_sensitive: true}
+    expected_tools: [string_op]
+    reference_steps: 2
+    tags: [string]
+
+  # --- composite: two tools, one feeding the other ------------------------
+  # These separate an agent that decomposes from one that pattern-matches.
+
+  - id: reverse_looked_up_fact
+    input: "Reverse the capital of Japan."
+    expected: "oykoT"
+    grader:
+      - exact_match: {case_sensitive: true}
+      - tool_choice_precision
+      - step_efficiency
+    expected_tools: [lookup, string_op]
+    reference_steps: 3
+    difficulty: hard
+    tags: [composite, core]
+
+  - id: uppercase_looked_up_fact
+    input: "Give the capital of Brazil in uppercase."
+    expected: "BRASILIA"
+    grader:
+      - exact_match: {case_sensitive: true}
+      - tool_choice_precision
+    expected_tools: [lookup, string_op]
+    reference_steps: 3
+    difficulty: hard
+    tags: [composite]
+
+  - id: arithmetic_over_fact
+    input: "What is the atomic number of carbon multiplied by 7?"
+    expected: "42"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - tool_choice_precision
+      - completed
+    expected_tools: [lookup, calculator]
+    reference_steps: 3
+    difficulty: hard
+    tags: [composite, core]
+
+  - id: days_in_leap_year_minus_one
+    input: "What is the days in a leap year minus 6?"
+    expected: "360"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - step_efficiency
+    expected_tools: [lookup, calculator]
+    reference_steps: 3
+    difficulty: hard
+    tags: [composite]
+
+  - id: word_count_of_fact
+    input: "How many words are in the largest ocean?"
+    expected: "2"
+    grader:
+      - numeric_tolerance: {abs: 0.5}
+      - tool_choice_precision
+    expected_tools: [lookup, string_op]
+    reference_steps: 3
+    difficulty: hard
+    tags: [composite]
+
+  # --- error handling and recovery ----------------------------------------
+
+  - id: unknown_fact_recovery
+    input: "What is the capital of Atlantis?"
+    expected: "no entry"
+    grader:
+      - completed
+      - recovered_from_error
+    expected_tools: [lookup]
+    reference_steps: 2
+    difficulty: hard
+    tags: [error, recovery]
+
+  # --- structured output ---------------------------------------------------
+
+  - id: json_shape_check
+    input: "What is 100 divided by 4?"
+    expected: "25"
+    grader:
+      - numeric_tolerance: {abs: 0.0001}
+      - json_schema_match:
+          schema:
+            type: number
+    reference_steps: 2
+    tags: [schema]
