@@ -1,0 +1,26 @@
+SUITE: reference-agent v2   vs   v1
+-------------------------------------------
+task success      92.0%      36.0%   +56.0
+steps (median)      2.0        4.0    -2.0
+cost / task      $0.020     $0.035    -43%
+p95 latency        0.3s       0.5s    -45%
+tool-error rate    6.7%      60.3%   -53.6
+
+REGRESSIONS (0)
+  none
+
+FIXES (14)
+  add_two_numbers                 fail -> pass
+  subtract_numbers                fail -> pass
+  multiply_numbers                fail -> pass
+  divide_numbers                  fail -> pass
+  percent_of                      fail -> pass
+  square_number                   fail -> pass
+  reverse_literal                 fail -> pass
+  uppercase_literal               fail -> pass
+  word_count_literal              fail -> pass
+  reverse_looked_up_fact          fail -> pass
+  uppercase_looked_up_fact        fail -> pass
+  arithmetic_over_fact            fail -> pass
+  days_in_leap_year_minus_one     fail -> pass
+  word_count_of_fact              fail -> pass

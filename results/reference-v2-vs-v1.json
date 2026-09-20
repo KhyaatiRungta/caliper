@@ -1,0 +1,331 @@
+{
+  "candidate": "20260920-185229-reference-agent-v2-5j6i",
+  "baseline": "20260920-185221-reference-agent-v1-yux4",
+  "metrics": [
+    {
+      "label": "task success",
+      "after": 0.92,
+      "before": 0.36,
+      "delta": 0.56
+    },
+    {
+      "label": "steps (median)",
+      "after": 2.0,
+      "before": 4.0,
+      "delta": -2.0
+    },
+    {
+      "label": "cost / task",
+      "after": 0.019800000000000005,
+      "before": 0.034920000000000014,
+      "delta": -0.015120000000000008
+    },
+    {
+      "label": "p95 latency",
+      "after": 0.2801060676574707,
+      "before": 0.5096108913421631,
+      "delta": -0.22950482368469238
+    },
+    {
+      "label": "tool-error rate",
+      "after": 0.06666666666666667,
+      "before": 0.6025641025641025,
+      "delta": -0.5358974358974359
+    }
+  ],
+  "task_deltas": [
+    {
+      "task_id": "add_two_numbers",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "subtract_numbers",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "multiply_numbers",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "divide_numbers",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "percent_of",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "square_number",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "relative_tolerance_pi",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "capital_of_france",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "capital_of_kenya",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "largest_ocean",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "longest_river",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "speed_of_light",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "seconds_in_a_day",
+      "before": "fail",
+      "after": "fail",
+      "transition": "fail->fail",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": "numeric_tolerance: could not parse a number (expected=86400.0, got=None)"
+    },
+    {
+      "task_id": "currency_of_japan",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 2,
+      "steps_after": 2,
+      "cost_before": 0.018,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "reverse_literal",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "uppercase_literal",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "word_count_literal",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "title_case_literal",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": ""
+    },
+    {
+      "task_id": "reverse_looked_up_fact",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 3,
+      "cost_before": 0.036,
+      "cost_after": 0.026999999999999996,
+      "detail": ""
+    },
+    {
+      "task_id": "uppercase_looked_up_fact",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 3,
+      "cost_before": 0.036,
+      "cost_after": 0.026999999999999996,
+      "detail": ""
+    },
+    {
+      "task_id": "arithmetic_over_fact",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 3,
+      "cost_before": 0.036,
+      "cost_after": 0.026999999999999996,
+      "detail": ""
+    },
+    {
+      "task_id": "days_in_leap_year_minus_one",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 5,
+      "steps_after": 3,
+      "cost_before": 0.045,
+      "cost_after": 0.026999999999999996,
+      "detail": ""
+    },
+    {
+      "task_id": "word_count_of_fact",
+      "before": "fail",
+      "after": "pass",
+      "transition": "fail->pass",
+      "steps_before": 4,
+      "steps_after": 3,
+      "cost_before": 0.036,
+      "cost_after": 0.026999999999999996,
+      "detail": ""
+    },
+    {
+      "task_id": "unknown_fact_recovery",
+      "before": "fail",
+      "after": "fail",
+      "transition": "fail->fail",
+      "steps_before": 4,
+      "steps_after": 2,
+      "cost_before": 0.036,
+      "cost_after": 0.018,
+      "detail": "completed: terminated_reason=error"
+    },
+    {
+      "task_id": "json_shape_check",
+      "before": "pass",
+      "after": "pass",
+      "transition": "pass->pass",
+      "steps_before": 5,
+      "steps_after": 2,
+      "cost_before": 0.045,
+      "cost_after": 0.018,
+      "detail": ""
+    }
+  ],
+  "regressions": [],
+  "fixes": [
+    "add_two_numbers",
+    "subtract_numbers",
+    "multiply_numbers",
+    "divide_numbers",
+    "percent_of",
+    "square_number",
+    "reverse_literal",
+    "uppercase_literal",
+    "word_count_literal",
+    "reverse_looked_up_fact",
+    "uppercase_looked_up_fact",
+    "arithmetic_over_fact",
+    "days_in_leap_year_minus_one",
+    "word_count_of_fact"
+  ],
+  "warnings": []
+}

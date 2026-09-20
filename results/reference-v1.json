@@ -1,0 +1,2888 @@
+{
+  "run_id": "20260920-185221-reference-agent-v1-yux4",
+  "suite": "reference",
+  "agent_name": "reference-agent",
+  "agent_version": "v1",
+  "model": "deterministic/reference",
+  "started_at": 1789930341.5219882,
+  "finished_at": 1789930344.235577,
+  "results": [
+    {
+      "task": {
+        "id": "add_two_numbers",
+        "suite": "reference",
+        "input": "What is 17 plus 25?",
+        "expected": "42",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "step_efficiency",
+          "no_redundant_calls"
+        ],
+        "tags": [
+          "arithmetic",
+          "core"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "add_two_numbers",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 17 plus 25?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 17 plus 25?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "17 plus 25"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '17 plus 25'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "17+25"
+            },
+            "output": 42.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "17+25"
+            },
+            "output": 42.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "42",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5078639984130859,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 42, got 42; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.4,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "5 steps vs reference 2 (slack 1.5x)"
+        },
+        {
+          "name": "no_redundant_calls",
+          "value": 0.75,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "1 repeated call(s): calculator"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "subtract_numbers",
+        "suite": "reference",
+        "input": "What is 1000 minus 373?",
+        "expected": "627",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "no_redundant_calls"
+        ],
+        "tags": [
+          "arithmetic",
+          "core"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "subtract_numbers",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 1000 minus 373?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 1000 minus 373?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "1000 minus 373"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '1000 minus 373'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "1000-373"
+            },
+            "output": 627.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "1000-373"
+            },
+            "output": 627.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "627",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5085711479187012,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 627, got 627; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "no_redundant_calls",
+          "value": 0.75,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "1 repeated call(s): calculator"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "multiply_numbers",
+        "suite": "reference",
+        "input": "What is 23 multiplied by 19?",
+        "expected": "437",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "step_efficiency"
+        ],
+        "tags": [
+          "arithmetic"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "multiply_numbers",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 23 multiplied by 19?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 23 multiplied by 19?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "23 multiplied by 19"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '23 multiplied by 19'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "23*19"
+            },
+            "output": 437.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "23*19"
+            },
+            "output": 437.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "437",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5089619159698486,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 437, got 437; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.4,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "5 steps vs reference 2 (slack 1.5x)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "divide_numbers",
+        "suite": "reference",
+        "input": "What is 144 divided by 12?",
+        "expected": "12",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "tool_choice_precision"
+        ],
+        "tags": [
+          "arithmetic"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "divide_numbers",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 144 divided by 12?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 144 divided by 12?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "144 divided by 12"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '144 divided by 12'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "144/12"
+            },
+            "output": 12.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "144/12"
+            },
+            "output": 12.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "12",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5096108913421631,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 12, got 12; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 0.5,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "precision 0.50 (1/2 calls useful); unnecessary: lookup"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "percent_of",
+        "suite": "reference",
+        "input": "What is 15 percent of 240?",
+        "expected": "36",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "rel": 0.001
+            }
+          },
+          "step_efficiency",
+          "cost_budget"
+        ],
+        "tags": [
+          "arithmetic"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "percent_of",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 15 percent of 240?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 15 percent of 240?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "15 percent of 240"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '15 percent of 240'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "(15/100)*240"
+            },
+            "output": 36.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "(15/100)*240"
+            },
+            "output": 36.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "36",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5085539817810059,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 36, got 36; rel delta 0 vs tol 0.001"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.4,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "5 steps vs reference 2 (slack 1.5x)"
+        },
+        {
+          "name": "cost_budget",
+          "value": 0.5555555555555556,
+          "unit": "usd",
+          "passed": false,
+          "detail": "$0.0450 against budget $0.0250"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "square_number",
+        "suite": "reference",
+        "input": "What is 13 squared?",
+        "expected": "169",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "no_redundant_calls",
+          "latency_budget"
+        ],
+        "tags": [
+          "arithmetic"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "square_number",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 13 squared?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 13 squared?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "13 squared"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '13 squared'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "13**2"
+            },
+            "output": 169.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "13**2"
+            },
+            "output": 169.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "169",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5092878341674805,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 169, got 169; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "no_redundant_calls",
+          "value": 0.75,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "1 repeated call(s): calculator"
+        },
+        {
+          "name": "latency_budget",
+          "value": 0.8835867849378403,
+          "unit": "seconds",
+          "passed": false,
+          "detail": "0.51s against budget 0.45s"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "relative_tolerance_pi",
+        "suite": "reference",
+        "input": "What is 22 divided by 7?",
+        "expected": "3.142857",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "rel": 0.001
+            }
+          }
+        ],
+        "tags": [
+          "arithmetic",
+          "tolerance"
+        ],
+        "difficulty": "medium",
+        "timeout_s": 15,
+        "expected_tools": [
+          "calculator"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "relative_tolerance_pi",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 22 divided by 7?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 22 divided by 7?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "22 divided by 7"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '22 divided by 7'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "22/7"
+            },
+            "output": 3.1428571429,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "22/7"
+            },
+            "output": 3.1428571429,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "3.14286",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5097801685333252,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 3.14286, got 3.14286; rel delta 9.54545e-07 vs tol 0.001"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "capital_of_france",
+        "suite": "reference",
+        "input": "What is the capital of France?",
+        "expected": "Paris",
+        "grader": [
+          "exact_match",
+          "tool_choice_precision",
+          "step_efficiency"
+        ],
+        "tags": [
+          "lookup",
+          "core"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "capital_of_france",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the capital of France?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the capital of France?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "capital of france"
+            },
+            "output": "Paris",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "Paris",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.22569489479064941,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (1/1 calls useful)"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "2 steps vs reference 2 (slack 1.5x)"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "capital_of_kenya",
+        "suite": "reference",
+        "input": "What is the capital of Kenya?",
+        "expected": "Nairobi",
+        "grader": "exact_match",
+        "tags": [
+          "lookup"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "capital_of_kenya",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the capital of Kenya?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the capital of Kenya?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "capital of kenya"
+            },
+            "output": "Nairobi",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "Nairobi",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.23018598556518555,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "largest_ocean",
+        "suite": "reference",
+        "input": "What is the largest ocean?",
+        "expected": "Pacific Ocean",
+        "grader": [
+          "exact_match",
+          "latency_budget"
+        ],
+        "tags": [
+          "lookup"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "largest_ocean",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the largest ocean?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the largest ocean?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "largest ocean"
+            },
+            "output": "Pacific Ocean",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "Pacific Ocean",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.22810602188110352,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        },
+        {
+          "name": "latency_budget",
+          "value": 1.0,
+          "unit": "seconds",
+          "passed": true,
+          "detail": "0.23s against budget 0.45s"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "longest_river",
+        "suite": "reference",
+        "input": "What is the longest river?",
+        "expected": "Nile",
+        "grader": [
+          {
+            "contains_all": {
+              "terms": [
+                "Nile"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "lookup"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "longest_river",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the longest river?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the longest river?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "longest river"
+            },
+            "output": "Nile",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "Nile",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.22916293144226074,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "contains_all",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "1/1 terms present"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "speed_of_light",
+        "suite": "reference",
+        "input": "What is the speed of light?",
+        "expected": "299792458 m/s",
+        "grader": [
+          {
+            "regex_match": {
+              "pattern": "299[,]?792[,]?458"
+            }
+          },
+          "tool_choice_precision"
+        ],
+        "tags": [
+          "lookup",
+          "regex"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "speed_of_light",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the speed of light?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the speed of light?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "speed of light"
+            },
+            "output": "299792458 m/s",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "299792458 m/s",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.22754907608032227,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "regex_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "pattern '299[,]?792[,]?458' matched"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (1/1 calls useful)"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "seconds_in_a_day",
+        "suite": "reference",
+        "input": "What is the number of seconds in a day?",
+        "expected": "86400",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.5
+            }
+          }
+        ],
+        "tags": [
+          "lookup"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "seconds_in_a_day",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the number of seconds in a day?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the number of seconds in a day?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "number of seconds in a day"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'number of seconds in a day'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": ""
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "empty expression"
+          }
+        ],
+        "final_output": null,
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.39663004875183105,
+        "terminated_reason": "error"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "could not parse a number (expected=86400.0, got=None)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "currency_of_japan",
+        "suite": "reference",
+        "input": "What is the currency of Japan?",
+        "expected": "yen",
+        "grader": [
+          "exact_match",
+          "no_redundant_calls"
+        ],
+        "tags": [
+          "lookup"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "currency_of_japan",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the currency of Japan?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the currency of Japan?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "currency of japan"
+            },
+            "output": "yen",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "yen",
+        "total_cost_usd": 0.018,
+        "total_tokens": 3520,
+        "wall_time_s": 0.22681474685668945,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        },
+        {
+          "name": "no_redundant_calls",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "no repeated calls"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "reverse_literal",
+        "suite": "reference",
+        "input": "Reverse the string 'caliper'",
+        "expected": "repilac",
+        "grader": [
+          {
+            "exact_match": {
+              "case_sensitive": true
+            }
+          },
+          "step_efficiency"
+        ],
+        "tags": [
+          "string",
+          "core"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "string_op"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "reverse_literal",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "Reverse the string 'caliper'"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for \"Reverse the string 'caliper'\". Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "reverse the string caliper"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'reverse the string caliper'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "reverse",
+              "text": "caliper"
+            },
+            "output": "repilac",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "repilac",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.39841675758361816,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.5,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "4 steps vs reference 2 (slack 1.5x)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "uppercase_literal",
+        "suite": "reference",
+        "input": "Convert the string 'regression' to uppercase",
+        "expected": "REGRESSION",
+        "grader": [
+          {
+            "exact_match": {
+              "case_sensitive": true
+            }
+          },
+          "tool_choice_precision"
+        ],
+        "tags": [
+          "string"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "string_op"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "uppercase_literal",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "Convert the string 'regression' to uppercase"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for \"Convert the string 'regression' to uppercase\". Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "convert the string regression to uppercase"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'convert the string regression to uppercase'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "upper",
+              "text": "regression"
+            },
+            "output": "REGRESSION",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "REGRESSION",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.3911271095275879,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 0.5,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "precision 0.50 (1/2 calls useful); unnecessary: lookup"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "word_count_literal",
+        "suite": "reference",
+        "input": "How many words are in 'the quick brown fox jumps'?",
+        "expected": "5",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.5
+            }
+          },
+          "step_efficiency"
+        ],
+        "tags": [
+          "string"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "string_op"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "word_count_literal",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "How many words are in 'the quick brown fox jumps'?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for \"How many words are in 'the quick brown fox jumps'?\". Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "how many words are in the quick brown fox jumps"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'how many words are in the quick brown fox jumps'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "word_count",
+              "text": "the quick brown fox jumps"
+            },
+            "output": 5,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "5",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.39915895462036133,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 5, got 5; abs delta 0 vs tol 0.5; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.5,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "4 steps vs reference 2 (slack 1.5x)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "title_case_literal",
+        "suite": "reference",
+        "input": "Convert the string 'trajectory grading' to title case",
+        "expected": "Trajectory Grading",
+        "grader": [
+          {
+            "exact_match": {
+              "case_sensitive": true
+            }
+          }
+        ],
+        "tags": [
+          "string"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [
+          "string_op"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "title_case_literal",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "Convert the string 'trajectory grading' to title case"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for \"Convert the string 'trajectory grading' to title case\". Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "convert the string trajectory grading to title case"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'convert the string trajectory grading to title case'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "title",
+              "text": "trajectory grading"
+            },
+            "output": "Trajectory Grading",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "Trajectory Grading",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.3939831256866455,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "match"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "reverse_looked_up_fact",
+        "suite": "reference",
+        "input": "Reverse the capital of Japan.",
+        "expected": "oykoT",
+        "grader": [
+          {
+            "exact_match": {
+              "case_sensitive": true
+            }
+          },
+          "tool_choice_precision",
+          "step_efficiency"
+        ],
+        "tags": [
+          "composite",
+          "core"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup",
+          "string_op"
+        ],
+        "reference_steps": 3,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "reverse_looked_up_fact",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "Reverse the capital of Japan."
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'Reverse the capital of Japan.'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "reverse the capital of japan"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'reverse the capital of japan'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "reverse",
+              "text": "Reverse the capital of Japan."
+            },
+            "output": ".napaJ fo latipac eht esreveR",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": ".napaJ fo latipac eht esreveR",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.392974853515625,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "expected 'oykoT', got '.napaJ fo latipac eht esreveR'"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (2/2 calls useful)"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.75,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "4 steps vs reference 3 (slack 1.5x)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "uppercase_looked_up_fact",
+        "suite": "reference",
+        "input": "Give the capital of Brazil in uppercase.",
+        "expected": "BRASILIA",
+        "grader": [
+          {
+            "exact_match": {
+              "case_sensitive": true
+            }
+          },
+          "tool_choice_precision"
+        ],
+        "tags": [
+          "composite"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup",
+          "string_op"
+        ],
+        "reference_steps": 3,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "uppercase_looked_up_fact",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "Give the capital of Brazil in uppercase."
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'Give the capital of Brazil in uppercase.'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "give the capital of brazil in uppercase"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'give the capital of brazil in uppercase'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "upper",
+              "text": "Give the capital of Brazil in uppercase."
+            },
+            "output": "GIVE THE CAPITAL OF BRAZIL IN UPPERCASE.",
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "GIVE THE CAPITAL OF BRAZIL IN UPPERCASE.",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.39153003692626953,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "exact_match",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "expected 'BRASILIA', got 'GIVE THE CAPITAL OF BRAZIL IN UPPERCASE.'"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (2/2 calls useful)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "arithmetic_over_fact",
+        "suite": "reference",
+        "input": "What is the atomic number of carbon multiplied by 7?",
+        "expected": "42",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "tool_choice_precision",
+          "completed"
+        ],
+        "tags": [
+          "composite",
+          "core"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup",
+          "calculator"
+        ],
+        "reference_steps": 3,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "arithmetic_over_fact",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the atomic number of carbon multiplied by 7?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the atomic number of carbon multiplied by 7?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "atomic number of carbon multiplied by 7"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'atomic number of carbon multiplied by 7'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "*7"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "cannot parse expression '*7': invalid syntax"
+          }
+        ],
+        "final_output": null,
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.3945329189300537,
+        "terminated_reason": "error"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "could not parse a number (expected=42.0, got=None)"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (2/2 calls useful)"
+        },
+        {
+          "name": "completed",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "terminated_reason=error"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "days_in_leap_year_minus_one",
+        "suite": "reference",
+        "input": "What is the days in a leap year minus 6?",
+        "expected": "360",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          "step_efficiency"
+        ],
+        "tags": [
+          "composite"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup",
+          "calculator"
+        ],
+        "reference_steps": 3,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "days_in_leap_year_minus_one",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the days in a leap year minus 6?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the days in a leap year minus 6?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "days in a leap year minus 6"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'days in a leap year minus 6'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "-6"
+            },
+            "output": -6.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "-6"
+            },
+            "output": -6.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "-6",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5058808326721191,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "expected 360, got -6; abs delta 366 vs tol 0.0001; rel delta 1.01667 vs tol 0.01"
+        },
+        {
+          "name": "step_efficiency",
+          "value": 0.6,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "5 steps vs reference 3 (slack 1.5x)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "word_count_of_fact",
+        "suite": "reference",
+        "input": "How many words are in the largest ocean?",
+        "expected": "2",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.5
+            }
+          },
+          "tool_choice_precision"
+        ],
+        "tags": [
+          "composite"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup",
+          "string_op"
+        ],
+        "reference_steps": 3,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "word_count_of_fact",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "How many words are in the largest ocean?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'How many words are in the largest ocean?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "how many words are in the largest ocean"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'how many words are in the largest ocean'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "string_op",
+            "input": {
+              "op": "word_count",
+              "text": "How many words are in the largest ocean"
+            },
+            "output": 8,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "8",
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.39291906356811523,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "expected 2, got 8; abs delta 6 vs tol 0.5; rel delta 3 vs tol 0.01"
+        },
+        {
+          "name": "tool_choice_precision",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "precision 1.00 (2/2 calls useful)"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "unknown_fact_recovery",
+        "suite": "reference",
+        "input": "What is the capital of Atlantis?",
+        "expected": "no entry",
+        "grader": [
+          "completed",
+          "recovered_from_error"
+        ],
+        "tags": [
+          "error",
+          "recovery"
+        ],
+        "difficulty": "hard",
+        "timeout_s": 15,
+        "expected_tools": [
+          "lookup"
+        ],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "unknown_fact_recovery",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is the capital of Atlantis?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is the capital of Atlantis?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "capital of atlantis"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'capital of atlantis'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": ""
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "empty expression"
+          }
+        ],
+        "final_output": null,
+        "total_cost_usd": 0.036,
+        "total_tokens": 7040,
+        "wall_time_s": 0.3875441551208496,
+        "terminated_reason": "error"
+      },
+      "scores": [
+        {
+          "name": "completed",
+          "value": 0.0,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "terminated_reason=error"
+        },
+        {
+          "name": "recovered_from_error",
+          "value": 0.6666666666666666,
+          "unit": "ratio",
+          "passed": false,
+          "detail": "recovered from 2/3 errored step(s); never recovered: calculator"
+        }
+      ],
+      "passed": false,
+      "infra_error": null
+    },
+    {
+      "task": {
+        "id": "json_shape_check",
+        "suite": "reference",
+        "input": "What is 100 divided by 4?",
+        "expected": "25",
+        "grader": [
+          {
+            "numeric_tolerance": {
+              "abs": 0.0001
+            }
+          },
+          {
+            "json_schema_match": {
+              "schema": {
+                "type": "number"
+              }
+            }
+          }
+        ],
+        "tags": [
+          "schema"
+        ],
+        "difficulty": "easy",
+        "timeout_s": 15,
+        "expected_tools": [],
+        "reference_steps": 2,
+        "cost_budget_usd": 0.025,
+        "latency_budget_s": 0.45,
+        "metadata": {}
+      },
+      "trajectory": {
+        "task_id": "json_shape_check",
+        "steps": [
+          {
+            "index": 0,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "What is 100 divided by 4?"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for 'What is 100 divided by 4?'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 1,
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "100 divided by 4"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": "no entry for '100 divided by 4'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
+          },
+          {
+            "index": 2,
+            "kind": "internal",
+            "name": "reconsider",
+            "input": {
+              "note": "lookup failed twice, trying computation"
+            },
+            "output": null,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.05,
+            "error": null
+          },
+          {
+            "index": 3,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "100/4"
+            },
+            "output": 25.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          },
+          {
+            "index": 4,
+            "kind": "tool",
+            "name": "calculator",
+            "input": {
+              "expression": "100/4"
+            },
+            "output": 25.0,
+            "tokens_in": 1450,
+            "tokens_out": 310,
+            "cost_usd": 0.009,
+            "latency_s": 0.0,
+            "error": null
+          }
+        ],
+        "final_output": "25",
+        "total_cost_usd": 0.045,
+        "total_tokens": 8800,
+        "wall_time_s": 0.5032041072845459,
+        "terminated_reason": "completed"
+      },
+      "scores": [
+        {
+          "name": "numeric_tolerance",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "expected 25, got 25; abs delta 0 vs tol 0.0001; rel delta 0 vs tol 0.01"
+        },
+        {
+          "name": "json_schema_match",
+          "value": 1.0,
+          "unit": "ratio",
+          "passed": true,
+          "detail": "schema satisfied"
+        }
+      ],
+      "passed": true,
+      "infra_error": null
+    }
+  ],
+  "summary": {
+    "total_tasks": 25,
+    "graded": 25,
+    "passed": 9,
+    "failed": 16,
+    "infra_errors": 0,
+    "timeouts": 0,
+    "task_success": 0.36,
+    "steps_median": 4,
+    "steps_mean": 3.88,
+    "total_steps": 97,
+    "total_cost_usd": 0.8730000000000003,
+    "cost_per_task": 0.034920000000000014,
+    "total_tokens": 170720,
+    "latency_mean": 0.39512182235717774,
+    "latency_p95": 0.5096108913421631,
+    "wall_time_s": 2.7135889530181885,
+    "tool_calls": 78,
+    "tool_error_rate": 0.6025641025641025,
+    "graders": {
+      "numeric_tolerance": {
+        "n": 13.0,
+        "passed": 9.0,
+        "value_sum": 9.0,
+        "pass_rate": 0.6923076923076923,
+        "mean_value": 0.6923076923076923
+      },
+      "step_efficiency": {
+        "n": 8.0,
+        "passed": 2.0,
+        "value_sum": 4.55,
+        "pass_rate": 0.25,
+        "mean_value": 0.56875
+      },
+      "no_redundant_calls": {
+        "n": 4.0,
+        "passed": 1.0,
+        "value_sum": 3.25,
+        "pass_rate": 0.25,
+        "mean_value": 0.8125
+      },
+      "tool_choice_precision": {
+        "n": 8.0,
+        "passed": 6.0,
+        "value_sum": 7.0,
+        "pass_rate": 0.75,
+        "mean_value": 0.875
+      },
+      "cost_budget": {
+        "n": 1.0,
+        "passed": 0.0,
+        "value_sum": 0.5555555555555556,
+        "pass_rate": 0.0,
+        "mean_value": 0.5555555555555556
+      },
+      "latency_budget": {
+        "n": 2.0,
+        "passed": 1.0,
+        "value_sum": 1.8835867849378403,
+        "pass_rate": 0.5,
+        "mean_value": 0.9417933924689201
+      },
+      "exact_match": {
+        "n": 9.0,
+        "passed": 7.0,
+        "value_sum": 7.0,
+        "pass_rate": 0.7777777777777778,
+        "mean_value": 0.7777777777777778
+      },
+      "contains_all": {
+        "n": 1.0,
+        "passed": 1.0,
+        "value_sum": 1.0,
+        "pass_rate": 1.0,
+        "mean_value": 1.0
+      },
+      "regex_match": {
+        "n": 1.0,
+        "passed": 1.0,
+        "value_sum": 1.0,
+        "pass_rate": 1.0,
+        "mean_value": 1.0
+      },
+      "completed": {
+        "n": 2.0,
+        "passed": 0.0,
+        "value_sum": 0.0,
+        "pass_rate": 0.0,
+        "mean_value": 0.0
+      },
+      "recovered_from_error": {
+        "n": 1.0,
+        "passed": 0.0,
+        "value_sum": 0.6666666666666666,
+        "pass_rate": 0.0,
+        "mean_value": 0.6666666666666666
+      },
+      "json_schema_match": {
+        "n": 1.0,
+        "passed": 1.0,
+        "value_sum": 1.0,
+        "pass_rate": 1.0,
+        "mean_value": 1.0
+      }
+    }
+  }
+}
