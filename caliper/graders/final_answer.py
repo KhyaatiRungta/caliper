@@ -28,7 +28,10 @@ def _normalise(text: str, case_sensitive: bool, strip_punct: bool) -> str:
     if not case_sensitive:
         out = out.lower()
     if strip_punct:
+        # Keep dots and hyphens (decimals, negative numbers, hyphenated words)
+        # but drop trailing sentence punctuation: "Paris." answers "Paris".
         out = re.sub(r"[^\w\s.\-]", "", out)
+        out = out.strip().rstrip(".,;:!?")
     return out.strip()
 
 
