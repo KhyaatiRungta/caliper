@@ -42,19 +42,25 @@ difference is attributable to the routing policy alone.
 from __future__ import annotations
 
 import re
+import time
 from typing import Any
 
 from caliper.adapter import TrajectoryRecorder
 from caliper.reference import tools as T
 from caliper.types import Task, Trajectory
 
-# Notional per-step token accounting so that cost and token metrics are
-# non-zero and proportional to work done. These are not billed tokens; they are
-# a deterministic model of them, and the site says so.
-TOKENS_IN_PER_STEP = 180
-TOKENS_OUT_PER_STEP = 40
+# The reference agent makes no network calls, so it models the two costs a real
+# agent pays -- tokens and latency -- deterministically, at magnitudes typical
+# of a tool-using agent step (a system prompt plus tool schemas plus history).
+# Caliper's measurements of those costs are real: the sleep is really slept and
+# the tokens are really summed. What is modelled is the agent, not the meter.
+# The website says so explicitly.
+TOKENS_IN_PER_STEP = 1450
+TOKENS_OUT_PER_STEP = 310
 PRICE_IN_PER_M = 3.00
 PRICE_OUT_PER_M = 15.00
+TOOL_LATENCY_S = 0.11
+THINK_LATENCY_S = 0.05
 
 _ARITH_RE = re.compile(
     r"(\d[\d,]*(?:\.\d+)?\s*[-+*/^%]\s*\d)|(\bplus\b|\bminus\b|\btimes\b|"
@@ -178,6 +184,7 @@ class ReferenceAgent:
             tokens_out=TOKENS_OUT_PER_STEP,
             cost_usd=_step_cost(),
         )
+        time.sleep(TOOL_LATENCY_S)
         try:
             value = T.call_tool(name, **kwargs)
         except T.ToolError as exc:
@@ -187,6 +194,7 @@ class ReferenceAgent:
         return True, value
 
     def _think(self, rec: TrajectoryRecorder, label: str, detail: Any = None) -> None:
+        time.sleep(THINK_LATENCY_S)
         rec.add(
             "internal",
             label,
@@ -194,6 +202,7 @@ class ReferenceAgent:
             tokens_in=TOKENS_IN_PER_STEP,
             tokens_out=TOKENS_OUT_PER_STEP,
             cost_usd=_step_cost(),
+            latency_s=THINK_LATENCY_S,
         )
 
     # -- the loop ----------------------------------------------------------

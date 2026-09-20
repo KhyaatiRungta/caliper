@@ -12,8 +12,8 @@ suite: reference
 defaults:
   timeout_s: 15
   difficulty: easy
-  cost_budget_usd: 0.004
-  latency_budget_s: 5.0
+  cost_budget_usd: 0.025
+  latency_budget_s: 0.45
 
 tasks:
 
@@ -77,6 +77,7 @@ tasks:
     grader:
       - numeric_tolerance: {abs: 0.0001}
       - no_redundant_calls
+      - latency_budget
     expected_tools: [calculator]
     reference_steps: 2
     tags: [arithmetic]
