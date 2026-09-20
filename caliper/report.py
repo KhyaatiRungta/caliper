@@ -161,7 +161,7 @@ def render_html(run: SuiteRun, cmp: Comparison | None = None) -> str:
     parts.append("</tbody></table>")
 
     parts += [
-        "<footer>caliper &middot; Manav Arya Singh &middot; 2026</footer>",
+        "<footer>caliper &middot; 2026</footer>",
         "</main></body></html>",
     ]
     return "\n".join(parts)

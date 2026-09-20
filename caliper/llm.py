@@ -161,7 +161,7 @@ class LLMClient:
             "temperature": self.temperature,
             "max_tokens": max_tokens,
             "extra_headers": {
-                "HTTP-Referer": "https://github.com/Manavarya09/caliper",
+                "HTTP-Referer": "https://github.com/caliper-eval/caliper",
                 "X-Title": "Caliper",
             },
             "extra_body": {"usage": {"include": True}},

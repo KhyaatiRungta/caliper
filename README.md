@@ -294,4 +294,4 @@ round-trip.
 
 ---
 
-caliper - Manav Arya Singh - 2026
+caliper - 2026

@@ -183,6 +183,7 @@ class ReferenceAgent:
             tokens_in=TOKENS_IN_PER_STEP,
             tokens_out=TOKENS_OUT_PER_STEP,
             cost_usd=_step_cost(),
+            latency_s=TOOL_LATENCY_S,
         )
         time.sleep(TOOL_LATENCY_S)
         try:

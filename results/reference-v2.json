@@ -1,11 +1,11 @@
 {
-  "run_id": "20260920-185229-reference-agent-v2-5j6i",
+  "run_id": "20260920-190305-reference-agent-v2-geal",
   "suite": "reference",
   "agent_name": "reference-agent",
   "agent_version": "v2",
   "model": "deterministic/reference",
-  "started_at": 1789930349.151278,
-  "finished_at": 1789930350.434307,
+  "started_at": 1789930985.2346098,
+  "finished_at": 1789930986.515669,
   "results": [
     {
       "task": {
@@ -66,14 +66,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "42",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.17031002044677734,
+        "wall_time_s": 0.16633820533752441,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -160,14 +160,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "627",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16595935821533203,
+        "wall_time_s": 0.16507601737976074,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -246,14 +246,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "437",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.17014312744140625,
+        "wall_time_s": 0.16630101203918457,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -332,14 +332,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "12",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1698141098022461,
+        "wall_time_s": 0.16634082794189453,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -419,14 +419,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "36",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16642999649047852,
+        "wall_time_s": 0.17008304595947266,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -513,14 +513,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "169",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.17037391662597656,
+        "wall_time_s": 0.17008304595947266,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -606,14 +606,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "3.14286",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1627063751220703,
+        "wall_time_s": 0.16892313957214355,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -683,14 +683,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "Paris",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1642770767211914,
+        "wall_time_s": 0.16510605812072754,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -769,14 +769,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "Nairobi",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1624457836151123,
+        "wall_time_s": 0.16729092597961426,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -844,14 +844,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "Pacific Ocean",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16251182556152344,
+        "wall_time_s": 0.16652607917785645,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -867,7 +867,7 @@
           "value": 1.0,
           "unit": "seconds",
           "passed": true,
-          "detail": "0.16s against budget 0.45s"
+          "detail": "0.17s against budget 0.45s"
         }
       ],
       "passed": true,
@@ -931,14 +931,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "Nile",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16590595245361328,
+        "wall_time_s": 0.1654529571533203,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1011,14 +1011,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "299792458 m/s",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1640310287475586,
+        "wall_time_s": 0.17004895210266113,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1096,14 +1096,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": "no entry for 'number of seconds in a day'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
           }
         ],
         "final_output": null,
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16766691207885742,
+        "wall_time_s": 0.161909818649292,
         "terminated_reason": "error"
       },
       "scores": [
@@ -1171,14 +1171,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "yen",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.17084312438964844,
+        "wall_time_s": 0.1701040267944336,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1259,14 +1259,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "repilac",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.1658039093017578,
+        "wall_time_s": 0.16503381729125977,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1346,14 +1346,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "REGRESSION",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16838407516479492,
+        "wall_time_s": 0.16539907455444336,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1433,14 +1433,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "5",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16561508178710938,
+        "wall_time_s": 0.16591882705688477,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1519,14 +1519,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "Trajectory Grading",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16586971282958984,
+        "wall_time_s": 0.16475915908813477,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1601,7 +1601,7 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           },
           {
@@ -1616,14 +1616,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "oykoT",
         "total_cost_usd": 0.026999999999999996,
         "total_tokens": 5280,
-        "wall_time_s": 0.2801060676574707,
+        "wall_time_s": 0.2810208797454834,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1710,7 +1710,7 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           },
           {
@@ -1725,14 +1725,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "BRASILIA",
         "total_cost_usd": 0.026999999999999996,
         "total_tokens": 5280,
-        "wall_time_s": 0.2782120704650879,
+        "wall_time_s": 0.28239893913269043,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1814,7 +1814,7 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           },
           {
@@ -1828,14 +1828,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "42",
         "total_cost_usd": 0.026999999999999996,
         "total_tokens": 5280,
-        "wall_time_s": 0.28386926651000977,
+        "wall_time_s": 0.2831242084503174,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1922,7 +1922,7 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           },
           {
@@ -1936,14 +1936,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "360",
         "total_cost_usd": 0.026999999999999996,
         "total_tokens": 5280,
-        "wall_time_s": 0.27890467643737793,
+        "wall_time_s": 0.28510212898254395,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2023,7 +2023,7 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           },
           {
@@ -2038,14 +2038,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "2",
         "total_cost_usd": 0.026999999999999996,
         "total_tokens": 5280,
-        "wall_time_s": 0.279620885848999,
+        "wall_time_s": 0.2772688865661621,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2121,14 +2121,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": "no entry for 'capital of atlantis'. Known keys include: atomic number of carbon, boiling point of water, capital of brazil, capital of france, capital of japan, ..."
           }
         ],
         "final_output": null,
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.16559410095214844,
+        "wall_time_s": 0.16771411895751953,
         "terminated_reason": "error"
       },
       "scores": [
@@ -2211,14 +2211,14 @@
             "tokens_in": 1450,
             "tokens_out": 310,
             "cost_usd": 0.009,
-            "latency_s": 0.0,
+            "latency_s": 0.11,
             "error": null
           }
         ],
         "final_output": "25",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.17025208473205566,
+        "wall_time_s": 0.16947412490844727,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2255,9 +2255,9 @@
     "total_cost_usd": 0.4950000000000001,
     "cost_per_task": 0.019800000000000005,
     "total_tokens": 96800,
-    "latency_mean": 0.18942602157592772,
-    "latency_p95": 0.2801060676574707,
-    "wall_time_s": 1.2830290794372559,
+    "latency_mean": 0.1898719310760498,
+    "latency_p95": 0.2831242084503174,
+    "wall_time_s": 1.2810592651367188,
     "tool_calls": 30,
     "tool_error_rate": 0.06666666666666667,
     "graders": {
