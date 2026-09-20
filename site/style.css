@@ -47,6 +47,7 @@ body {
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
 
 section { padding: 5rem 0; }
+section[id] { scroll-margin-top: 4rem; }
 section + section { border-top: 1px solid var(--rule); }
 
 p, ul, ol, dl { max-width: 68ch; }
@@ -54,6 +55,10 @@ p, ul, ol, dl { max-width: 68ch; }
 code, pre, .mono, table, svg text, .btn, nav, .eyebrow, .metric, .step-n {
   font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-variant-numeric: tabular-nums;
+  /* Render CLI flags and arrows literally: no "--" or "->" ligatures. */
+  font-variant-ligatures: none;
+  -webkit-font-feature-settings: "liga" 0, "calt" 0;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 /* --- nav -------------------------------------------------------------- */
@@ -262,3 +267,19 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 1.6rem; justify-content: spa
 footer ul { display: flex; gap: 1.4rem; list-style: none; margin: 0; padding: 0; max-width: none; }
 footer a { color: var(--dim); text-decoration: none; }
 footer a:hover { color: var(--fg); }
+
+/* --- narrow viewports -------------------------------------------------- */
+
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  section { padding: 3.5rem 0; }
+  /* Wide tables scroll inside their own box rather than pushing the page. */
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  .steps li { grid-template-columns: 2.2rem 1fr; gap: .6rem; }
+  .cta { gap: .6rem; }
+  .btn { padding: .65rem 1.1rem; }
+}
+
+/* Long identifiers and paths must wrap rather than widen the page. */
+code { overflow-wrap: anywhere; }
+h1, h2, p, li { overflow-wrap: break-word; }
