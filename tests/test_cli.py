@@ -141,9 +141,15 @@ def test_html_report_is_standalone(home, tmp_path, capsys):
     assert run_cli(["report", "latest", "--against", "latest~1", "--html", str(out)], home) == 0
     html = out.read_text(encoding="utf-8")
     assert html.startswith("<!doctype html>")
-    assert "<script" not in html.lower()
-    assert "http://" not in html and "https://" not in html
+    # Standalone means no remote assets: styles are inline, nothing is fetched.
+    # Footer hyperlinks are fine; they are navigation, not a dependency.
+    lowered = html.lower()
+    assert "<script" not in lowered
+    assert "<img" not in lowered
+    assert "<link" not in lowered
     assert "SUITE: reference-agent v2" in html
+    # No author byline anywhere in generated output.
+    assert "Manav Arya" not in html
 
 
 def test_prune(home, capsys):

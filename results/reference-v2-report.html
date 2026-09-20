@@ -3,10 +3,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Caliper report: reference / reference-agent v2</title><style>
 :root {
-  --bg: #faf8f3; --fg: #16150f; --accent: #1f3a5f; --rule: #d8d3c7; --dim: #6b665a;
+  --bg: #faf8f3; --fg: #16150f; --accent: #1f3a5f; --rule: #d8d3c7;
+  --dim: #6b665a; --panel: #f3f0e8; --term-bg: #16150f; --term-fg: #e8e4da;
+  --term-dim: #8b8576;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #12110e; --fg: #e8e4da; --accent: #8fb0d6; --rule: #35322b; --dim: #97917f; }
+  :root {
+    --bg: #12110e; --fg: #e8e4da; --accent: #8fb0d6; --rule: #35322b;
+    --dim: #97917f; --panel: #1a1815; --term-bg: #0c0b09; --term-fg: #e8e4da;
+    --term-dim: #7d7768;
+  }
 }
 * { box-sizing: border-box; }
 body {
@@ -14,60 +20,86 @@ body {
   font-family: ui-serif, Georgia, 'Times New Roman', serif;
   font-size: 17px; line-height: 1.65;
 }
-main { max-width: 1000px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
-h1 { font-size: 1.7rem; font-weight: 600; margin: 0 0 .3rem; letter-spacing: -.01em; }
-h2 {
-  font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace; color: var(--dim);
-  border-top: 1px solid var(--rule); padding-top: 1.2rem; margin: 3rem 0 1.2rem;
-}
-.sub { color: var(--dim); font-size: .95rem; margin: 0 0 2rem; }
-code, pre, table, .mono {
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+main { max-width: 1080px; margin: 0 auto; padding: 3.5rem 1.5rem 5rem; }
+code, pre, table, .mono, .metric, .eyebrow {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-variant-numeric: tabular-nums;
 }
-pre {
-  font-size: .85rem; line-height: 1.5; overflow-x: auto;
-  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  padding: 1.2rem 0; margin: 0;
+.eyebrow {
+  font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--dim); margin: 0 0 1rem;
 }
-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 600;
+  letter-spacing: -.02em; line-height: 1.15; margin: 0 0 .4rem;
+}
+h2 {
+  font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; color: var(--dim);
+  border-top: 1px solid var(--rule); padding-top: 1.2rem; margin: 3.2rem 0 1.2rem;
+}
+.sub { color: var(--dim); font-size: .85rem; margin: 0 0 2.4rem; }
+.metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.metric { padding: 1.4rem 1.2rem; border-left: 1px solid var(--rule); }
+.metric:first-child { border-left: 0; padding-left: 0; }
+.metric .fig { font-size: 1.5rem; font-weight: 600; letter-spacing: -.03em; display: block; }
+.metric .lbl {
+  font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--dim); display: block; margin-top: .4rem;
+}
+@media (max-width: 760px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .metric:nth-child(3) { border-left: 0; padding-left: 0; }
+  .metric:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+}
+.term {
+  background: var(--term-bg); color: var(--term-fg);
+  border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin: 1.4rem 0;
+}
+.term .bar {
+  font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--term-dim); padding: .45rem 1rem;
+  border-bottom: 1px solid rgba(139, 133, 118, .3);
+}
+.term pre {
+  margin: 0; padding: 1.1rem 1rem; overflow-x: auto;
+  font-size: .8rem; line-height: 1.6; color: var(--term-fg);
+}
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
 th {
   text-align: left; font-weight: 600; color: var(--dim); text-transform: uppercase;
-  letter-spacing: .08em; font-size: .7rem; padding: .4rem .6rem .4rem 0;
-  border-bottom: 1px solid var(--rule);
+  letter-spacing: .1em; font-size: .64rem; padding: .45rem .8rem .45rem 0;
+  border-bottom: 1px solid var(--fg);
 }
-td { padding: .38rem .6rem .38rem 0; border-bottom: 1px solid var(--rule); }
-td.num, th.num { text-align: right; padding-right: 1.2rem; }
+td { padding: .4rem .8rem .4rem 0; border-bottom: 1px solid var(--rule); }
+td.num, th.num { text-align: right; padding-right: 1.4rem; }
 .pass { color: var(--accent); }
 .fail { font-weight: 600; }
-.kv { display: grid; grid-template-columns: 14rem 1fr; gap: .1rem 1rem; font-size: .85rem; }
+.kv { display: grid; grid-template-columns: 14rem 1fr; gap: .1rem 1rem; font-size: .84rem; }
 .kv dt { color: var(--dim); }
 .kv dd { margin: 0; }
 footer {
-  border-top: 1px solid var(--rule); margin-top: 4rem; padding-top: 1.2rem;
-  font-size: .8rem; color: var(--dim);
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  border-top: 1px solid var(--rule); margin-top: 3.5rem; padding-top: 1.2rem;
+  font-size: .76rem; color: var(--dim);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
+footer a { color: var(--dim); text-decoration: none; margin-left: 1.2rem; }
+footer a:hover { color: var(--fg); }
 </style></head><body><main>
+<p class="eyebrow">Caliper run report</p>
 <h1>reference / reference-agent v2</h1>
-<p class="sub mono">run 20260920-190305-reference-agent-v2-geal &middot; 2026-09-20 19:03 UTC &middot; model deterministic/reference</p>
-<h2>Summary</h2>
-<dl class="kv mono">
-<dt>task success</dt><dd>92.0%</dd>
-<dt>passed</dt><dd>23 / 25</dd>
-<dt>infra errors</dt><dd>0</dd>
-<dt>timeouts</dt><dd>0</dd>
-<dt>steps (median)</dt><dd>2.0</dd>
-<dt>cost / task</dt><dd>$0.0198</dd>
-<dt>total cost</dt><dd>$0.4950</dd>
-<dt>total tokens</dt><dd>96,800</dd>
-<dt>p95 latency</dt><dd>0.28s</dd>
-<dt>tool-error rate</dt><dd>6.7%</dd>
-<dt>tool calls</dt><dd>30</dd>
-<dt>wall time</dt><dd>1.28s</dd>
-</dl>
+<p class="sub">run 20260920-190305-reference-agent-v2-geal &middot; 2026-09-20 19:03 UTC &middot; model deterministic/reference</p>
+<div class="metrics">
+<div class="metric"><span class="fig">92.0%</span><span class="lbl">task success</span></div>
+<div class="metric"><span class="fig">2.0</span><span class="lbl">steps (median)</span></div>
+<div class="metric"><span class="fig">$0.0198</span><span class="lbl">cost / task</span></div>
+<div class="metric"><span class="fig">6.7%</span><span class="lbl">tool-error rate</span></div>
+</div>
 <h2>Comparison against v1</h2>
+<div class="term"><div class="bar">caliper compare 20260920-190305-reference-agent-v2-geal 20260920-190302-reference-agent-v1-avnr</div>
 <pre>SUITE: reference-agent v2   vs   v1
 -------------------------------------------
 task success      92.0%      36.0%   +56.0
@@ -93,7 +125,21 @@ FIXES (14)
   uppercase_looked_up_fact        fail -&gt; pass
   arithmetic_over_fact            fail -&gt; pass
   days_in_leap_year_minus_one     fail -&gt; pass
-  word_count_of_fact              fail -&gt; pass</pre>
+  word_count_of_fact              fail -&gt; pass</pre></div>
+<h2>Run detail</h2>
+<dl class="kv">
+<dt>passed</dt><dd>23 / 25 graded</dd>
+<dt>failed</dt><dd>2</dd>
+<dt>infra errors</dt><dd>0</dd>
+<dt>timeouts</dt><dd>0</dd>
+<dt>total steps</dt><dd>55</dd>
+<dt>tool calls</dt><dd>30</dd>
+<dt>total cost</dt><dd>$0.4950</dd>
+<dt>total tokens</dt><dd>96,800</dd>
+<dt>mean latency</dt><dd>0.19s</dd>
+<dt>p95 latency</dt><dd>0.28s</dd>
+<dt>wall time</dt><dd>1.28s</dd>
+</dl>
 <h2>Graders</h2>
 <table><thead><tr><th>grader</th><th class="num">pass rate</th><th class="num">mean value</th><th class="num">n</th></tr></thead><tbody>
 <tr><td class='mono'>completed</td><td class='num mono'>50.0%</td><td class='num mono'>0.50</td><td class='num mono'>2</td></tr>
@@ -137,5 +183,5 @@ FIXES (14)
 <tr><td class='mono fail'>fail</td><td class='mono'>unknown_fact_recovery</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td>completed: terminated_reason=error</td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>json_shape_check</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 </tbody></table>
-<footer>caliper &middot; 2026</footer>
+<footer>caliper &middot; 2026<a href="https://github.com/Manavarya09/quarry">quarry</a><a href="https://github.com/Manavarya09/strata">strata</a><a href="https://github.com/Manavarya09/caliper">caliper</a></footer>
 </main></body></html>
