@@ -179,7 +179,14 @@ tasks:
 Shipped suites: `suites/reference.yaml` (25 tasks, exercises every grader),
 `suites/strata.yaml` and `suites/quarry.yaml` for the two sibling agent
 projects. The sibling adapters import lazily and fail with instructions if the
-repo is not on the import path.
+repo is not on the import path, if its environment is broken, or if its
+constructor needs wiring the adapter cannot guess.
+
+Those two adapters are **provisional**: Strata and Quarry are being written in
+parallel, so the adapters bind to whichever conventional entry point those
+repos expose and tolerate several shapes of trace. They will be pinned once the
+sibling APIs settle. The reference agent, not those adapters, is what the test
+suite guarantees.
 
 ## CLI
 
@@ -283,7 +290,7 @@ regardless of completion order, so two run files diff cleanly.
 ## Tests
 
 ```bash
-pytest          # 269 tests, no API key required
+pytest          # 273 tests, no API key required
 ```
 
 Covers every grader including empty trajectories and zero-denominator rate
