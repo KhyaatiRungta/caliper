@@ -63,7 +63,7 @@ def render_comparison(cmp: Comparison, show_fixes: bool = True) -> str:
         task success      78.0%      64.0%   +14.0
         steps (median)      4.0        6.0    -2.0
         cost / task      $0.031     $0.048    -35%
-        p95 latency        12.4s      19.1s    -35%
+        p95 latency       12.4s      19.1s    -35%
         tool-error rate    9.2%      22.5%   -13.3
 
         REGRESSIONS (2)
