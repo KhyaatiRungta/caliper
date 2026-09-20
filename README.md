@@ -283,7 +283,7 @@ regardless of completion order, so two run files diff cleanly.
 ## Tests
 
 ```bash
-pytest          # 258 tests, no API key required
+pytest          # 269 tests, no API key required
 ```
 
 Covers every grader including empty trajectories and zero-denominator rate
