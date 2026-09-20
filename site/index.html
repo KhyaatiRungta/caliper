@@ -4,254 +4,324 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Caliper</title>
-<meta name="description" content="An evaluation and observability harness for LLM agents. Scores the whole trajectory, not just the final answer, and fails CI on regressions.">
+<meta name="description" content="Caliper scores the whole agent trajectory, not just the final answer, and fails your build when a task that used to pass stops passing.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
 
-<h1>Caliper</h1>
-<p class="lede">An evaluation and observability harness for LLM agents. You define a task
-suite, register an agent behind a thin adapter, and Caliper runs it, scores the whole
-trajectory, stores every run, and diffs two versions.</p>
-<p class="meta">It measures whether a change to an agent made it better or worse, and what
-that change cost in steps, dollars and latency.</p>
+<nav>
+  <div class="wrap">
+    <a class="wordmark" href="#top">caliper</a>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#benchmarks">Benchmarks</a></li>
+      <li><a href="https://github.com/Manavarya09/caliper">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
 
-<div class="hero">
-<pre>SUITE: reference-agent v2   vs   v1
--------------------------------------------
-task success      92.0%      36.0%   +56.0
-steps (median)      2.0        4.0    -2.0
-cost / task      $0.020     $0.035    -43%
-p95 latency        0.3s       0.5s    -44%
-tool-error rate    6.7%      60.3%   -53.6
+<main id="top">
 
-REGRESSIONS (0)
-  none</pre>
-</div>
-<p class="note">Verbatim output of <code>caliper compare latest latest~1</code>, committed at
-<code>results/reference-v2-vs-v1.txt</code>. It compares two versions of the built-in
-reference agent over the 25 tasks in <code>suites/reference.yaml</code>. Reproduce it with no
-API key in about ten seconds; every figure except latency is deterministic. When any task goes
-<code>pass -&gt; fail</code>, the same command exits 1 and blocks the merge.</p>
+<!-- ============================ HERO ============================ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Agent evaluation harness</p>
+    <h1>Know whether your agent got better, or just different.</h1>
+    <p class="lede">Caliper runs a task suite against your agent, scores the whole trajectory
+    rather than the last line of output, and diffs two versions. When a task that used to pass
+    stops passing, it exits non-zero and blocks the merge.</p>
 
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/Manavarya09/caliper">View on GitHub</a>
+      <a class="btn btn-secondary" href="#benchmarks">See the benchmarks</a>
+    </div>
 
-<h2>The problem</h2>
+    <div class="term">
+      <div class="bar">bash</div>
+<pre><span class="p">$</span> caliper run suites/reference.yaml --agent reference-v1 --offline
+<span class="p">$</span> caliper run suites/reference.yaml --agent reference-v2 --offline
+<span class="p">$</span> caliper compare latest latest~1 --fail-on-regression</pre>
+    </div>
+    <p class="note">No API key needed for any of those three lines.</p>
+  </div>
+</section>
 
-<p>Almost every agent evaluation compares a final answer to an expected string. That
-measurement is cheap, obvious, and blind to most of what goes wrong in production. An agent
-that answers correctly after nine tool calls, two of them identical and one of them a crash it
-papered over, scores exactly the same as one that answered in three. The first is 3x the
-bill, 3x the tail latency, and one traffic spike away from an incident. The score says they
-are the same agent.</p>
+<!-- ======================= METRIC STRIP ========================= -->
+<section style="padding-top:0;border-top:0">
+  <div class="wrap">
+    <div class="metrics">
+      <div class="metric"><span class="fig">+56.0</span><span class="lbl">points task success</span></div>
+      <div class="metric"><span class="fig">-43%</span><span class="lbl">cost per task</span></div>
+      <div class="metric"><span class="fig">-53.6</span><span class="lbl">points tool-error rate</span></div>
+      <div class="metric"><span class="fig">13</span><span class="lbl">built-in graders</span></div>
+    </div>
+    <p class="note">Measured, not claimed. The first three are the v2-against-v1 deltas from
+    <code>results/reference-v2-vs-v1.json</code>, committed in the repo and reproducible
+    offline in about ten seconds.</p>
+  </div>
+</section>
 
-<p>The gap shows up at exactly the wrong moment. Someone edits a system prompt on Friday,
-the eval suite still says 84%, and the cost-per-conversation quietly doubles because the model
-started double-checking itself. Nothing in the harness was looking at the trajectory, so
-nothing in the harness could have said so. Caliper is the part that looks.</p>
+<!-- ========================= OVERVIEW =========================== -->
+<section id="overview">
+  <div class="wrap">
+    <p class="kicker">Overview</p>
+    <h2>Most people build agents. Few measure them.</h2>
+    <p class="lede" style="margin-bottom:1.2rem">Almost every agent eval compares a final
+    answer to an expected string. That measurement is cheap, obvious, and blind to most of
+    what goes wrong in production.</p>
+    <p>An agent that answers correctly after nine tool calls, two of them identical and one of
+    them a crash it papered over, scores exactly the same as one that answered in three. The
+    first is three times the bill, three times the tail latency, and one traffic spike away
+    from an incident. The score says they are the same agent.</p>
+    <p>The gap shows up at the worst moment. Someone edits a system prompt on a Friday, the
+    suite still reports 84%, and cost per conversation quietly doubles because the model
+    started double-checking itself. Nothing in the harness was looking at the trajectory, so
+    nothing in the harness could have said so.</p>
 
+    <div class="cards">
+      <div class="card">
+        <h3>Fails the build on regressions</h3>
+        <p>Run <code>caliper compare a b --fail-on-regression</code> as a CI step. It exits 1
+        when a named task goes from pass to fail, and 0 otherwise. Infrastructure errors are
+        excluded in both directions, so a rate limit never blocks a merge.</p>
+      </div>
+      <div class="card">
+        <h3>Scores the whole trajectory</h3>
+        <p>Seven trajectory graders read the step list, not the final string: step efficiency,
+        tool choice, redundant calls, error recovery, and cost and latency budgets. They catch
+        the regressions a final-answer check structurally cannot see.</p>
+      </div>
+      <div class="card">
+        <h3>Works on the agent you already have</h3>
+        <p>The entire coupling is one method: <code>run(task) -&gt; Trajectory</code>. No base
+        class, no framework, no patching of your LLM client. Roughly ten lines of recording
+        makes a hand-written loop measurable.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2>Why trajectory scoring matters</h2>
+<!-- ====================== WHY TRAJECTORY ======================== -->
+<section>
+  <div class="wrap">
+    <p class="kicker">The argument</p>
+    <h2>Same answer. Two and a half times the cost.</h2>
+    <p>This is one real task from the benchmark run below. Both versions of the agent returned
+    the same final answer.</p>
 
-<p>This is one real task from the run in the table above. Both versions of the agent returned
-the same final answer.</p>
+    <table>
+      <thead>
+        <tr><th>version</th><th>final answer</th><th class="num">steps</th>
+        <th class="num">cost</th><th class="num">latency</th>
+        <th><code>numeric_tolerance</code></th><th>task verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">v1</td><td class="mono">42</td><td class="num mono">5</td>
+        <td class="num mono">$0.0450</td><td class="num mono">0.51s</td>
+        <td class="mono pass">pass</td><td class="mono fail">FAIL</td></tr>
+        <tr><td class="mono">v2</td><td class="mono">42</td><td class="num mono">2</td>
+        <td class="num mono">$0.0180</td><td class="num mono">0.17s</td>
+        <td class="mono pass">pass</td><td class="mono pass">pass</td></tr>
+      </tbody>
+    </table>
 
-<table>
-<thead>
-<tr><th>version</th><th>final answer</th><th class="num">steps</th><th class="num">cost</th>
-<th class="num">latency</th><th><code>numeric_tolerance</code></th><th>task verdict</th></tr>
-</thead>
-<tbody>
-<tr><td class="mono">v1</td><td class="mono">42</td><td class="num mono">5</td>
-<td class="num mono">$0.0450</td><td class="num mono">0.51s</td>
-<td class="mono pass">pass</td><td class="mono fail">FAIL</td></tr>
-<tr><td class="mono">v2</td><td class="mono">42</td><td class="num mono">2</td>
-<td class="num mono">$0.0180</td><td class="num mono">0.17s</td>
-<td class="mono pass">pass</td><td class="mono pass">pass</td></tr>
-</tbody>
-</table>
+    <p>A final-answer harness sees two identical <code>42</code>s and stops. On the only axis
+    it measures, these agents are indistinguishable. Here is what actually happened:</p>
 
-<p>A final-answer harness sees two identical <code>42</code>s and stops. On the only axis it
-measures, these agents are indistinguishable. Here is what actually happened, from
-<code>caliper trace</code>:</p>
+    <div class="term">
+      <div class="bar">caliper trace latest~1 add_two_numbers</div>
+<pre>TASK:   add_two_numbers   [reference]
+INPUT:  What is 17 plus 25?
+EXPECT: 42
+RESULT: FAIL
+END:    completed   5 steps   $0.0450   0.51s
+----------------------------------------------------------------------
+[ 0] tool      lookup           0.11s  $0.0090  1450+310 tok
+      in   {'key': 'What is 17 plus 25?'}
+      ERROR no entry for 'What is 17 plus 25?'
+[ 1] tool      lookup           0.11s  $0.0090  1450+310 tok
+      in   {'key': '17 plus 25'}
+      ERROR no entry for '17 plus 25'
+[ 2] internal  reconsider       0.05s  $0.0090  1450+310 tok
+      in   {'note': 'lookup failed twice, trying computation'}
+[ 3] tool      calculator       0.11s  $0.0090  1450+310 tok
+      in   {'expression': '17+25'}
+      out  42.0
+[ 4] tool      calculator       0.11s  $0.0090  1450+310 tok
+      in   {'expression': '17+25'}
+      out  42.0
+----------------------------------------------------------------------
+FINAL:  42
 
-<pre><code>TASK:   add_two_numbers      INPUT: What is 17 plus 25?
-
-v1                                                    v2
-[ 0] tool  lookup      ERROR no entry for             [ 0] internal classify {'kind': 'arithmetic'}
-          'What is 17 plus 25?'                       [ 1] tool     calculator {'expression': '17+25'}
-[ 1] tool  lookup      ERROR no entry for                                      out 42.0
-          '17 plus 25'
-[ 2] internal reconsider                              FINAL: 42    2 steps  $0.0180  0.17s
-[ 3] tool  calculator  {'expression': '17+25'} 42.0
-[ 4] tool  calculator  {'expression': '17+25'} 42.0
-
-FINAL: 42    5 steps  $0.0450  0.51s</code></pre>
-
-<p>v1 consulted a knowledge base twice for an arithmetic question, failed both times, computed
-the answer, and then computed the identical expression a second time to double-check it. Two
-wasted calls, two recorded tool errors, and a step the agent spent reconsidering a plan it
-should never have made. Caliper fails the task on two trajectory graders:</p>
-
-<pre><code>  pass  numeric_tolerance   1.00  expected 42, got 42; abs delta 0 vs tol 0.0001
+SCORES
+  pass  numeric_tolerance   1.00  expected 42, got 42; abs delta 0 vs tol 0.0001
   FAIL  step_efficiency     0.40  5 steps vs reference 2 (slack 1.5x)
-  FAIL  no_redundant_calls  0.75  1 repeated call(s): calculator</code></pre>
+  FAIL  no_redundant_calls  0.75  1 repeated call(s): calculator</pre>
+    </div>
 
-<p>Aggregated over 25 tasks this is the difference between a 60.3% tool-error rate and a 6.7%
-one. Neither number exists in a harness that only reads the last line of output.</p>
+    <p>v1 consulted a knowledge base twice for an arithmetic question, failed both times,
+    computed the answer, then computed the identical expression again to double-check it. Two
+    wasted calls, two recorded tool errors, and a step spent reconsidering a plan it should
+    never have made. v2 classifies the question first and calls the calculator once.</p>
+    <p>Aggregated over 25 tasks this is the difference between a 60.3% tool-error rate and a
+    6.7% one. Neither figure exists in a harness that only reads the last line of output.</p>
+  </div>
+</section>
 
+<!-- ======================== HOW IT WORKS ======================== -->
+<section id="how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2>Suite in, trajectory out, regression gate at the end.</h2>
 
-<h2>How it works</h2>
+    <figure>
+    <svg viewBox="0 0 1060 430" width="1060" height="430" role="img"
+         aria-label="Architecture: suite definition to runner to adapter to agent to trajectory recorder to graders to run store to compare to regression gate">
 
-<figure>
-<svg viewBox="0 0 1060 430" width="1060" height="430" role="img"
-     aria-label="Caliper architecture: suite definition to runner to adapter to agent to trajectory recorder to graders to run store to compare to regression gate">
+      <rect class="panel" x="8" y="14" width="150" height="46"/>
+      <text x="20" y="34">suites/*.yaml</text>
+      <text class="dim" x="20" y="50">tasks, graders, budgets</text>
 
-  <rect class="panel" x="8" y="14" width="150" height="46"/>
-  <text x="20" y="34">suites/*.yaml</text>
-  <text class="dim" x="20" y="50">tasks, graders, budgets</text>
+      <line x1="83" y1="60" x2="83" y2="92" marker-end="url(#a)"/>
 
-  <line x1="83" y1="60" x2="83" y2="92" marker-end="url(#a)"/>
+      <rect class="panel" x="8" y="92" width="150" height="62"/>
+      <text x="20" y="112">runner</text>
+      <text class="dim" x="20" y="128">ThreadPoolExecutor</text>
+      <text class="dim" x="20" y="143">N workers, timeout</text>
 
-  <rect class="panel" x="8" y="92" width="150" height="62"/>
-  <text x="20" y="112">runner</text>
-  <text class="dim" x="20" y="128">ThreadPoolExecutor</text>
-  <text class="dim" x="20" y="143">N workers, timeout</text>
+      <line x1="158" y1="123" x2="222" y2="123" marker-end="url(#a)"/>
+      <text class="dim" x="164" y="116">task</text>
 
-  <line x1="158" y1="123" x2="222" y2="123" marker-end="url(#a)"/>
-  <text class="dim" x="164" y="116">task</text>
+      <rect x="222" y="92" width="150" height="62"/>
+      <text x="234" y="112">adapter</text>
+      <text class="dim" x="234" y="128">name, version</text>
+      <text class="dim" x="234" y="143">run(task) -&gt; Trajectory</text>
 
-  <rect x="222" y="92" width="150" height="62"/>
-  <text x="234" y="112">adapter</text>
-  <text class="dim" x="234" y="128">name, version</text>
-  <text class="dim" x="234" y="143">run(task) -&gt; Trajectory</text>
+      <line x1="372" y1="123" x2="436" y2="123" marker-end="url(#a)"/>
 
-  <line x1="372" y1="123" x2="436" y2="123" marker-end="url(#a)"/>
+      <rect x="436" y="92" width="150" height="62"/>
+      <text x="448" y="112">agent</text>
+      <text class="dim" x="448" y="128">hand-written loop</text>
+      <text class="dim" x="448" y="143">llm, tool, retrieval</text>
 
-  <rect x="436" y="92" width="150" height="62"/>
-  <text x="448" y="112">agent</text>
-  <text class="dim" x="448" y="128">hand-written loop</text>
-  <text class="dim" x="448" y="143">llm, tool, retrieval</text>
+      <path d="M511 154 L511 186 L397 186" marker-end="url(#a)"/>
+      <text class="dim" x="420" y="180">emits steps</text>
 
-  <path d="M511 154 L511 186 L397 186" marker-end="url(#a)"/>
-  <text class="dim" x="420" y="180">emits steps</text>
+      <rect class="panel" x="222" y="196" width="175" height="62"/>
+      <text x="234" y="216">TrajectoryRecorder</text>
+      <text class="dim" x="234" y="232">index, kind, name, io</text>
+      <text class="dim" x="234" y="247">tokens, cost, latency, error</text>
 
-  <rect class="panel" x="222" y="196" width="175" height="62"/>
-  <text x="234" y="216">TrajectoryRecorder</text>
-  <text class="dim" x="234" y="232">index, kind, name, io</text>
-  <text class="dim" x="234" y="247">tokens, cost, latency, error</text>
+      <path d="M222 227 L150 227 L150 262" marker-end="url(#a)"/>
+      <text class="dim" x="160" y="221">Trajectory</text>
 
-  <path d="M222 227 L150 227 L150 262" marker-end="url(#a)"/>
-  <text class="dim" x="160" y="221">Trajectory</text>
+      <rect x="8" y="262" width="330" height="90"/>
+      <text x="20" y="282">graders</text>
+      <text class="dim" x="20" y="300">final answer   exact_match, numeric_tolerance,</text>
+      <text class="dim" x="20" y="315">               contains_all, regex, json_schema, llm_judge</text>
+      <text class="dim" x="20" y="333">trajectory     step_efficiency, tool_choice_precision,</text>
+      <text class="dim" x="20" y="348">               no_redundant_calls, recovered_from_error, budgets</text>
 
-  <rect x="8" y="262" width="330" height="90"/>
-  <text x="20" y="282">graders</text>
-  <text class="dim" x="20" y="300">final answer   exact_match, numeric_tolerance,</text>
-  <text class="dim" x="20" y="315">               contains_all, regex, json_schema, llm_judge</text>
-  <text class="dim" x="20" y="333">trajectory     step_efficiency, tool_choice_precision,</text>
-  <text class="dim" x="20" y="348">               no_redundant_calls, recovered_from_error, budgets</text>
+      <line x1="338" y1="307" x2="402" y2="307" marker-end="url(#a)"/>
+      <text class="dim" x="344" y="300">scores</text>
 
-  <line x1="338" y1="307" x2="402" y2="307" marker-end="url(#a)"/>
-  <text class="dim" x="344" y="300">scores</text>
+      <rect class="panel" x="402" y="276" width="170" height="62"/>
+      <text x="414" y="296">run store</text>
+      <text class="dim" x="414" y="312">.caliper/runs/</text>
+      <text class="dim" x="414" y="327">&lt;run_id&gt;.json</text>
 
-  <rect class="panel" x="402" y="276" width="170" height="62"/>
-  <text x="414" y="296">run store</text>
-  <text class="dim" x="414" y="312">.caliper/runs/</text>
-  <text class="dim" x="414" y="327">&lt;run_id&gt;.json</text>
+      <path d="M572 307 L636 307" marker-end="url(#a)"/>
 
-  <path d="M572 307 L636 307" marker-end="url(#a)"/>
+      <rect x="636" y="276" width="170" height="62"/>
+      <text x="648" y="296">compare</text>
+      <text class="dim" x="648" y="312">metric deltas</text>
+      <text class="dim" x="648" y="327">pass-&gt;fail transitions</text>
 
-  <rect x="636" y="276" width="170" height="62"/>
-  <text x="648" y="296">compare</text>
-  <text class="dim" x="648" y="312">metric deltas</text>
-  <text class="dim" x="648" y="327">pass-&gt;fail transitions</text>
+      <path class="accent" d="M806 307 L870 307" marker-end="url(#b)"/>
 
-  <path class="accent" d="M806 307 L870 307" marker-end="url(#b)"/>
+      <rect x="870" y="276" width="180" height="62"/>
+      <text x="882" y="296">regression gate</text>
+      <text class="dim" x="882" y="312">exit 1 on any pass-&gt;fail</text>
+      <text class="dim" x="882" y="327">exit 0 otherwise</text>
 
-  <rect x="870" y="276" width="180" height="62"/>
-  <text x="882" y="296">regression gate</text>
-  <text class="dim" x="882" y="312">exit 1 on any pass-&gt;fail</text>
-  <text class="dim" x="882" y="327">exit 0 otherwise</text>
+      <path d="M487 276 L487 196 L636 196 L636 276" stroke-dasharray="3 3"/>
+      <text class="dim" x="510" y="190">baseline run, loaded from disk</text>
 
-  <path d="M487 276 L487 196 L636 196 L636 276" stroke-dasharray="3 3"/>
-  <text class="dim" x="510" y="190">baseline run, loaded from disk</text>
+      <rect class="panel" x="636" y="92" width="414" height="62"/>
+      <text x="648" y="112">run summary</text>
+      <text class="dim" x="648" y="128">task_success, steps_median, cost_per_task, latency_p95,</text>
+      <text class="dim" x="648" y="143">tool_error_rate, infra_errors, per-grader pass rates</text>
+      <path d="M572 300 L604 300 L604 123 L636 123" stroke-dasharray="3 3"/>
 
-  <rect class="panel" x="636" y="92" width="414" height="62"/>
-  <text x="648" y="112">run summary</text>
-  <text class="dim" x="648" y="128">task_success, steps_median, cost_per_task, latency_p95,</text>
-  <text class="dim" x="648" y="143">tool_error_rate, infra_errors, per-grader pass rates</text>
-  <path d="M572 300 L604 300 L604 123 L636 123" stroke-dasharray="3 3"/>
+      <defs>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        </marker>
+        <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>The measured loop. Caliper never wraps or patches the agent: the adapter hands
+    back a Trajectory and everything downstream reads that one object. Dashed lines are disk
+    reads, not live calls.</figcaption>
+    </figure>
 
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
-            orient="auto-start-reverse">
-      <path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="currentColor" stroke-width="1.2"/>
-    </marker>
-    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
-            orient="auto-start-reverse">
-      <path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="currentColor" stroke-width="1.2"/>
-    </marker>
-  </defs>
-</svg>
-<figcaption>The measured loop. Caliper never wraps or patches the agent: the adapter hands
-back a Trajectory and everything downstream reads that one object. The dashed lines are disk
-reads, not live calls.</figcaption>
-</figure>
+    <ol class="steps">
+      <li><span class="step-n">01</span>
+        <div><h3>Load the suite</h3>
+        <p>YAML parses into <code>Task</code> objects. Defaults merge into each task, and a
+        duplicate id is a hard error, because a silently dropped task is a silently missing
+        regression.</p></div></li>
+      <li><span class="step-n">02</span>
+        <div><h3>Resolve the agent</h3>
+        <p><code>--agent reference-v2</code> goes through the registry;
+        <code>--agent mypkg.adapter:build</code> resolves anything importable. The adapter's
+        <code>version</code> is the axis the whole comparison is built around.</p></div></li>
+      <li><span class="step-n">03</span>
+        <div><h3>Dispatch in parallel</h3>
+        <p>A thread pool, four workers by default. Each task carries its own timeout, enforced
+        over execution time only, so a task queued behind three others is not penalised for
+        waiting its turn.</p></div></li>
+      <li><span class="step-n">04</span>
+        <div><h3>The agent records steps</h3>
+        <p>Each step carries a kind, a name, input and output, tokens, cost, latency, and an
+        error string if it failed. The recorder captures an exception into
+        <code>step.error</code> before re-raising, so an agent that dies mid-tool still leaves
+        an accurate record of the tool that killed it.</p></div></li>
+      <li><span class="step-n">05</span>
+        <div><h3>Isolate failures</h3>
+        <p>A task that raises produces a failing result and nothing else. A transient provider
+        fault is retried with backoff and, if it persists, recorded as an infrastructure error
+        and excluded from the pass rate. A rate limit is not the agent being wrong.</p></div></li>
+      <li><span class="step-n">06</span>
+        <div><h3>Grade</h3>
+        <p>Graders are pure functions, so a stored run can be re-graded later without re-running
+        the agent. A grader that raises yields a failing score carrying the exception, and its
+        siblings still run.</p></div></li>
+      <li><span class="step-n">07</span>
+        <div><h3>Persist</h3>
+        <p>The run is written atomically to <code>.caliper/runs/&lt;run_id&gt;.json</code> in
+        suite order regardless of which worker finished first, so two run files diff
+        cleanly.</p></div></li>
+      <li><span class="step-n">08</span>
+        <div><h3>Compare and gate</h3>
+        <p>Two runs join on task id. Every task is classified pass-to-fail, fail-to-pass, or
+        unchanged, and with <code>--fail-on-regression</code> the command exits 1 if the first
+        bucket is non-empty.</p></div></li>
+    </ol>
 
-<h3>One run, step by step</h3>
-
-<ol class="tight">
-<li><strong>Load the suite.</strong> <code>suites/reference.yaml</code> is parsed into
-<code>Task</code> objects. Defaults merge into each task; duplicate ids are a hard error,
-because a silently dropped task is a silently missing regression.</li>
-
-<li><strong>Resolve the agent.</strong> <code>--agent reference-v2</code> resolves through the
-registry; <code>--agent mypkg.adapter:build</code> resolves anything importable. The adapter
-declares a <code>name</code> and a <code>version</code>, and the version is the axis the whole
-comparison is built around.</li>
-
-<li><strong>Dispatch in parallel.</strong> A <code>ThreadPoolExecutor</code> with four workers
-by default. Each task carries its own <code>timeout_s</code>, enforced by the runner over
-execution time only, so a task queued behind three others is not penalised for waiting.</li>
-
-<li><strong>The agent records steps.</strong> Each step carries a kind
-(<code>llm</code>, <code>tool</code>, <code>retrieval</code>, <code>internal</code>), a name,
-its input and output, tokens in and out, cost, latency, and an error string if it failed. The
-step context manager captures an exception into <code>step.error</code> before re-raising, so
-an agent that dies mid-tool still leaves an accurate record of the tool that killed it.</li>
-
-<li><strong>Isolate failures.</strong> A task that raises produces a failing result and
-nothing else. A transient provider fault is retried with backoff and, if it persists, recorded
-as <code>infra_error</code> and excluded from the pass rate. A rate limit is not the agent
-being wrong, and a harness that reports it as a regression teaches the team to ignore the
-harness.</li>
-
-<li><strong>Grade.</strong> Every grader named by the task runs over the finished trajectory.
-Graders are pure functions, so a stored run can be re-graded later without re-running the
-agent. A grader that raises yields a failing score carrying the exception, and its siblings
-still run.</li>
-
-<li><strong>Persist.</strong> The whole run is written atomically to
-<code>.caliper/runs/&lt;run_id&gt;.json</code>, in suite order regardless of which worker
-finished first, so two run files diff cleanly.</li>
-
-<li><strong>Compare and gate.</strong> <code>caliper compare</code> joins two runs on task id,
-computes metric deltas, classifies every task as <code>pass-&gt;fail</code>,
-<code>fail-&gt;pass</code>, <code>pass-&gt;pass</code> or <code>fail-&gt;fail</code>, and with
-<code>--fail-on-regression</code> exits 1 if the first bucket is non-empty.</li>
-</ol>
-
-<h3>The adapter contract</h3>
-
-<p>This is the entire surface an agent must implement. There is no base class to inherit, no
-framework to adopt, and no callback API to keep up with.</p>
-
-<pre><code>class AgentAdapter(Protocol):
+    <p class="kicker" style="margin-top:3.5rem">The adapter contract</p>
+    <p>This is the entire surface an agent must implement. No base class to inherit, no
+    framework to adopt, no callback API to keep up with.</p>
+    <pre class="plain"><code>class AgentAdapter(Protocol):
     name: str
     version: str
     def run(self, task: Task) -&gt; Trajectory: ...</code></pre>
-
-<pre><code>from caliper.adapter import TrajectoryRecorder
+    <pre class="plain"><code>from caliper.adapter import TrajectoryRecorder
 
 class MyAgent:
     name = "my-agent"
@@ -261,257 +331,295 @@ class MyAgent:
         rec = TrajectoryRecorder(task.id)
         with rec.step("llm", "plan") as s:
             resp = self.client.complete(messages)
-            s.output = resp.text
+            s.output     = resp.text
             s.tokens_in  = resp.usage.prompt_tokens
             s.tokens_out = resp.usage.completion_tokens
             s.cost_usd   = resp.usage.cost_usd
         with rec.step("tool", "search", input=query) as s:
             s.output = self.search(query)
         return rec.finish(final_output=answer)</code></pre>
+  </div>
+</section>
 
+<!-- ======================== BENCHMARKS ========================== -->
+<section id="benchmarks">
+  <div class="wrap">
+    <p class="kicker">Benchmarks</p>
+    <h2>A routing change, measured on every axis that costs money.</h2>
+    <p>v2 of the reference agent classifies and decomposes a question before acting. v1
+    consults its knowledge base first and reconsiders after it fails. That one difference is
+    worth 56 points of task success and 43% of the per-task bill.</p>
 
-<h2>Graders</h2>
+    <div class="term">
+      <div class="bar">caliper compare latest latest~1</div>
+<pre>SUITE: reference-agent v2   vs   v1
+-------------------------------------------
+task success      92.0%      36.0%   +56.0
+steps (median)      2.0        4.0    -2.0
+cost / task      $0.020     $0.035    -43%
+p95 latency        0.3s       0.5s    -44%
+tool-error rate    6.7%      60.3%   -53.6
 
-<p>Registry-based and referenced by name from the suite file. Every grader is a pure function
-with the same signature, registered with a decorator.</p>
+REGRESSIONS (0)
+  none
 
-<table>
-<thead><tr><th>grader</th><th>kind</th><th>what it measures</th></tr></thead>
-<tbody>
-<tr><td class="mono">exact_match</td><td class="mono dim">final</td>
-<td>whitespace-normalised string equality</td></tr>
-<tr><td class="mono">numeric_tolerance</td><td class="mono dim">final</td>
-<td>numeric comparison with relative and absolute tolerance</td></tr>
-<tr><td class="mono">contains_all</td><td class="mono dim">final</td>
-<td>every required substring present, with partial credit</td></tr>
-<tr><td class="mono">regex_match</td><td class="mono dim">final</td>
-<td>search or fullmatch against a pattern</td></tr>
-<tr><td class="mono">json_schema_match</td><td class="mono dim">final</td>
-<td>parses as JSON and satisfies a small schema subset</td></tr>
-<tr><td class="mono">llm_judge</td><td class="mono dim">final</td>
-<td>rubric-based, five fixed buckets, majority vote over n samples</td></tr>
-<tr><td class="mono">step_efficiency</td><td class="mono dim">trajectory</td>
-<td>steps taken against a reference optimum, with slack</td></tr>
-<tr><td class="mono">tool_choice_precision</td><td class="mono dim">trajectory</td>
-<td>were the tools called the ones the task actually needed</td></tr>
-<tr><td class="mono">no_redundant_calls</td><td class="mono dim">trajectory</td>
-<td>same tool, same arguments, called twice</td></tr>
-<tr><td class="mono">recovered_from_error</td><td class="mono dim">trajectory</td>
-<td>did an errored step get followed by a successful one</td></tr>
-<tr><td class="mono">cost_budget</td><td class="mono dim">trajectory</td>
-<td>trajectory cost against a task-level dollar budget</td></tr>
-<tr><td class="mono">latency_budget</td><td class="mono dim">trajectory</td>
-<td>wall clock against a task-level budget</td></tr>
-<tr><td class="mono">completed</td><td class="mono dim">trajectory</td>
-<td>did the agent terminate normally at all</td></tr>
-</tbody>
-</table>
+FIXES (14)
+  add_two_numbers                 fail -&gt; pass
+  subtract_numbers                fail -&gt; pass
+  multiply_numbers                fail -&gt; pass
+  divide_numbers                  fail -&gt; pass
+  percent_of                      fail -&gt; pass
+  square_number                   fail -&gt; pass
+  reverse_literal                 fail -&gt; pass
+  uppercase_literal               fail -&gt; pass
+  word_count_literal              fail -&gt; pass
+  reverse_looked_up_fact          fail -&gt; pass
+  uppercase_looked_up_fact        fail -&gt; pass
+  arithmetic_over_fact            fail -&gt; pass
+  days_in_leap_year_minus_one     fail -&gt; pass
+  word_count_of_fact              fail -&gt; pass</pre>
+    </div>
+    <p class="note">Verbatim output, committed at
+    <code>results/reference-v2-vs-v1.txt</code>. Run in the other direction the same command
+    reports 14 regressions and exits 1.</p>
 
-<p>Adding one is a decorator and an import:</p>
+    <h3 style="margin-top:3rem">Per-grader breakdown</h3>
+    <table>
+      <thead>
+        <tr><th>grader</th><th class="num">v2 pass rate</th><th class="num">v1 pass rate</th>
+        <th class="num">v2 mean</th><th class="num">v1 mean</th><th class="num">n</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">exact_match</td><td class="num mono">100.0%</td><td class="num mono">77.8%</td><td class="num mono">1.00</td><td class="num mono">0.78</td><td class="num mono">9</td></tr>
+        <tr><td class="mono">numeric_tolerance</td><td class="num mono">92.3%</td><td class="num mono">69.2%</td><td class="num mono">0.92</td><td class="num mono">0.69</td><td class="num mono">13</td></tr>
+        <tr><td class="mono">contains_all</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
+        <tr><td class="mono">regex_match</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
+        <tr><td class="mono">json_schema_match</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
+        <tr><td class="mono">step_efficiency</td><td class="num mono">100.0%</td><td class="num mono">25.0%</td><td class="num mono">1.00</td><td class="num mono">0.57</td><td class="num mono">8</td></tr>
+        <tr><td class="mono">tool_choice_precision</td><td class="num mono">100.0%</td><td class="num mono">75.0%</td><td class="num mono">1.00</td><td class="num mono">0.88</td><td class="num mono">8</td></tr>
+        <tr><td class="mono">no_redundant_calls</td><td class="num mono">100.0%</td><td class="num mono">25.0%</td><td class="num mono">1.00</td><td class="num mono">0.81</td><td class="num mono">4</td></tr>
+        <tr><td class="mono">recovered_from_error</td><td class="num mono">0.0%</td><td class="num mono">0.0%</td><td class="num mono">0.00</td><td class="num mono">0.67</td><td class="num mono">1</td></tr>
+        <tr><td class="mono">cost_budget</td><td class="num mono">100.0%</td><td class="num mono">0.0%</td><td class="num mono">1.00</td><td class="num mono">0.56</td><td class="num mono">1</td></tr>
+        <tr><td class="mono">latency_budget</td><td class="num mono">100.0%</td><td class="num mono">50.0%</td><td class="num mono">1.00</td><td class="num mono">0.94</td><td class="num mono">2</td></tr>
+        <tr><td class="mono">completed</td><td class="num mono">50.0%</td><td class="num mono">0.0%</td><td class="num mono">0.50</td><td class="num mono">0.00</td><td class="num mono">2</td></tr>
+      </tbody>
+    </table>
 
-<pre><code>@grader("answers_in_one_sentence")
-def answers_in_one_sentence(task, trajectory, max_sentences: int = 1) -&gt; Score:
-    n = str(trajectory.final_output).count(".")
-    return Score(name="answers_in_one_sentence", value=1.0 if n &lt;= max_sentences else 0.0,
-                 passed=n &lt;= max_sentences, detail=f"{n} sentence(s)")</code></pre>
+    <p class="note"><strong>Methodology.</strong> Produced by <code>caliper run
+    suites/reference.yaml --agent reference-v1 --offline</code> and the same for
+    <code>reference-v2</code>, four workers, over the 25 tasks in
+    <code>suites/reference.yaml</code>. Both raw run files are committed at
+    <code>results/reference-v1.json</code> and <code>results/reference-v2.json</code>, and
+    every number on this page can be read out of them. Note the honest rows: both versions
+    fail <code>recovered_from_error</code> on the one task that tests it, and v2's
+    <code>completed</code> rate of 50% is a genuine remaining failure, not a rounding
+    artefact.</p>
 
+    <p class="note"><strong>What is modelled and what is measured.</strong> The reference
+    agent is deterministic and makes no LLM calls, so it models the two costs a real agent
+    pays: each step is charged 1450 input and 310 output tokens at published Sonnet-class
+    prices, and sleeps a fixed interval to stand in for network latency. Caliper's
+    measurements of those costs are real, in that the sleep is really slept and the tokens are
+    really summed by the same code path a live agent uses. What is simulated is the agent, not
+    the meter. Against a live agent the same figures come from the provider's reported
+    usage.</p>
+  </div>
+</section>
 
-<h2>Results</h2>
+<!-- ===================== DESIGN DECISIONS ======================= -->
+<section>
+  <div class="wrap">
+    <p class="kicker">Design decisions</p>
+    <h2>What was traded away, and for what.</h2>
 
-<p>The full per-grader breakdown for both versions of the reference agent over the same 25
-tasks. v2 differs from v1 in one respect: it classifies and decomposes the question before
-acting, rather than consulting the knowledge base first and reconsidering after it fails.</p>
+    <div class="decision">
+      <h3>Adapters, not framework integration</h3>
+      <p><span class="label">Decision</span>The entire coupling between Caliper and an agent is
+      <code>run(task) -&gt; Trajectory</code>. No callbacks, no base class, no patching of the
+      LLM client.</p>
+      <p><span class="label">Why</span>Framework callbacks give you instrumentation for free
+      and then own you. They break when the framework changes, they only cover agents built
+      inside that framework, and they see the framework's idea of a step rather than the
+      author's. A seventy-line recorder that an agent author copies into their own repo
+      survives all of that, and works equally well on a hand-written loop, a remote HTTP
+      service, or a shell script.</p>
+      <p><span class="label">Cost</span>Every agent author writes about ten lines of
+      instrumentation, and Caliper cannot see steps the agent chooses not to record. An agent
+      that records nothing is scored on its final answer alone, exactly like every other
+      harness.</p>
+    </div>
 
-<table>
-<thead>
-<tr><th>grader</th><th class="num">v2 pass rate</th><th class="num">v1 pass rate</th>
-<th class="num">v2 mean</th><th class="num">v1 mean</th><th class="num">n</th></tr>
-</thead>
-<tbody>
-<tr><td class="mono">exact_match</td><td class="num mono">100.0%</td><td class="num mono">77.8%</td><td class="num mono">1.00</td><td class="num mono">0.78</td><td class="num mono">9</td></tr>
-<tr><td class="mono">numeric_tolerance</td><td class="num mono">92.3%</td><td class="num mono">69.2%</td><td class="num mono">0.92</td><td class="num mono">0.69</td><td class="num mono">13</td></tr>
-<tr><td class="mono">contains_all</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
-<tr><td class="mono">regex_match</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
-<tr><td class="mono">json_schema_match</td><td class="num mono">100.0%</td><td class="num mono">100.0%</td><td class="num mono">1.00</td><td class="num mono">1.00</td><td class="num mono">1</td></tr>
-<tr><td class="mono">step_efficiency</td><td class="num mono">100.0%</td><td class="num mono">25.0%</td><td class="num mono">1.00</td><td class="num mono">0.57</td><td class="num mono">8</td></tr>
-<tr><td class="mono">tool_choice_precision</td><td class="num mono">100.0%</td><td class="num mono">75.0%</td><td class="num mono">1.00</td><td class="num mono">0.88</td><td class="num mono">8</td></tr>
-<tr><td class="mono">no_redundant_calls</td><td class="num mono">100.0%</td><td class="num mono">25.0%</td><td class="num mono">1.00</td><td class="num mono">0.81</td><td class="num mono">4</td></tr>
-<tr><td class="mono">recovered_from_error</td><td class="num mono">0.0%</td><td class="num mono">0.0%</td><td class="num mono">0.00</td><td class="num mono">0.67</td><td class="num mono">1</td></tr>
-<tr><td class="mono">cost_budget</td><td class="num mono">100.0%</td><td class="num mono">0.0%</td><td class="num mono">1.00</td><td class="num mono">0.56</td><td class="num mono">1</td></tr>
-<tr><td class="mono">latency_budget</td><td class="num mono">100.0%</td><td class="num mono">50.0%</td><td class="num mono">1.00</td><td class="num mono">0.94</td><td class="num mono">2</td></tr>
-<tr><td class="mono">completed</td><td class="num mono">50.0%</td><td class="num mono">0.0%</td><td class="num mono">0.50</td><td class="num mono">0.00</td><td class="num mono">2</td></tr>
-</tbody>
-</table>
+    <div class="decision">
+      <h3>Trajectory graders as first-class, not an add-on</h3>
+      <p><span class="label">Decision</span>Seven of the thirteen built-in graders read the
+      step list rather than the final output, and a task fails if any of its graders fail.</p>
+      <p><span class="label">Why</span>Final-answer correctness is a strict subset of what
+      matters. The worked example above shows two agents with identical answers and a 2.5x
+      cost difference; only a trajectory grader separates them. Cost, tool discipline and
+      error recovery decide whether an agent survives contact with production traffic.</p>
+      <p><span class="label">Cost</span>Trajectory graders need the suite author to supply a
+      reference: a step optimum, an expected tool set, a budget. That is real judgement work,
+      and a badly chosen reference produces a confidently wrong efficiency score. Writing an
+      expected string is much easier, which is part of why most harnesses stop there.</p>
+    </div>
 
-<p class="note">How these were produced: <code>caliper run suites/reference.yaml --agent
-reference-v1 --offline</code> and the same for <code>reference-v2</code>, four workers, on the
-25 tasks in <code>suites/reference.yaml</code>. Both raw run files are committed at
-<code>results/reference-v1.json</code> and <code>results/reference-v2.json</code>, and every
-number on this page can be read out of them. Note the honest rows: both versions fail
-<code>recovered_from_error</code> on the one task that tests it, and v2's
-<code>completed</code> rate of 50% is a genuine remaining failure, not a rounding artefact.
-Caliper is not being run as a demo that flatters its own agent.</p>
+    <div class="decision">
+      <h3>Runs are files, not a database</h3>
+      <p><span class="label">Decision</span>Each run is one JSON file under
+      <code>.caliper/runs/</code>, written atomically. The store lists, loads and prunes.</p>
+      <p><span class="label">Why</span>A run is an immutable artifact produced by CI. Files
+      diff in a pull request, attach to a build, commit as a pinned baseline, and copy with
+      <code>scp</code>. A database would buy indexed queries over a dataset that is almost
+      always a few hundred rows, in exchange for a service to run and a schema to migrate.</p>
+      <p><span class="label">Cost</span>No indexed queries, and listing a thousand runs reads a
+      thousand files. One module would have to change if that tradeoff ever flipped, which is
+      the point of keeping it in one module.</p>
+    </div>
 
-<p class="note">What is modelled and what is measured: the reference agent is deterministic
-and makes no LLM calls, so it models the two costs a real agent pays. Each step is charged
-1450 input and 310 output tokens at published Sonnet-class prices, and sleeps a fixed interval
-to stand in for network latency. Caliper's measurements of those costs are real, in that the
-sleep is really slept and the tokens are really summed by the same code path a live agent
-uses. What is simulated is the agent, not the meter. Against a live agent the same numbers
-come from the provider's reported usage.</p>
+    <div class="decision">
+      <h3>Regressions exit non-zero</h3>
+      <p><span class="label">Decision</span><code>caliper compare --fail-on-regression</code>
+      exits 1 when any task went from pass to fail, and 0 otherwise.</p>
+      <p><span class="label">Why</span>A report nobody reads changes nothing; a gate that
+      blocks a merge changes behaviour. Being usable as a CI step is what turns an eval script
+      into infrastructure.</p>
+      <p><span class="label">Cost</span>The gate has to be narrow enough to be trusted, so it
+      fires only on a named task that used to pass. It deliberately ignores metrics that moved
+      the wrong way and excludes infrastructure errors in both directions, because a gate that
+      fires on a rate limit is a gate the team learns to bypass. A cost regression with no
+      correctness regression shows in the table but does not block the merge; that call is
+      left to the human reading the diff.</p>
+    </div>
 
+    <div class="decision">
+      <h3>Deterministic ordering under parallel execution</h3>
+      <p><span class="label">Decision</span>Results are emitted in suite order regardless of
+      which worker finished first, and task timeouts count execution time only, never time
+      spent queued.</p>
+      <p><span class="label">Why</span>Run files are compared by tools and read by humans. A
+      diff full of reordering noise hides the one line that matters, and a task that times out
+      because it waited behind three slow ones is a bug report about the harness, not about
+      the agent.</p>
+      <p><span class="label">Cost</span>The main thread polls futures rather than consuming
+      them as they complete, which is marginally less efficient and is the right trade at this
+      scale.</p>
+    </div>
+  </div>
+</section>
 
-<h2>Design decisions</h2>
+<!-- ======================== LIMITATIONS ========================= -->
+<section>
+  <div class="wrap">
+    <p class="kicker">Limitations</p>
+    <h2>What this does not do.</h2>
 
-<div class="decision">
-<h3>Adapters, not framework integration</h3>
-<p><span class="label">Decision</span>The entire coupling between Caliper and an agent is
-<code>run(task) -&gt; Trajectory</code>. No callbacks, no base class, no patching of the LLM
-client.</p>
-<p><span class="label">Why</span>Framework callbacks give you instrumentation for free and then
-own you. They break when the framework changes, they only cover agents built inside that
-framework, and they see the framework's idea of a step rather than the author's. A seventy-line
-recorder that an agent author copies into their own repo survives all of that, and works
-equally well on a hand-written loop, a remote HTTP service, or a shell script.</p>
-<p><span class="label">Cost</span>Every agent author writes about ten lines of
-instrumentation, and Caliper cannot see steps the agent chooses not to record. An agent that
-records nothing is scored on its final answer alone, exactly like every other harness.</p>
+    <ul class="tight">
+      <li><strong>LLM-judge variance is real and is not solved here.</strong> Re-grading the
+      same response can land in a different bucket, especially near the boundary between
+      "correct with a minor flaw" and "partially correct". Temperature 0, a fixed five-point
+      rubric with named anchors, and majority vote over n samples with the agreement reported
+      in the score detail all reduce it. None of them eliminate it. A comparison that hinges
+      entirely on a few points of <code>llm_judge</code> delta hinges on noise, and the
+      deterministic graders should carry the weight wherever a task admits one.</li>
+
+      <li><strong>No distributed execution.</strong> One process, one thread pool, one machine.
+      Adequate for a suite of a few hundred tasks and not a replacement for a job queue. A
+      suite that takes an hour on one box will take an hour.</li>
+
+      <li><strong>Timed-out tasks are abandoned, not killed.</strong> Python cannot safely kill
+      a thread. The result is recorded as a timeout immediately and the run proceeds, but the
+      worker may still be running underneath and still holding whatever resource it held. This
+      is the correct trade for an eval harness and the wrong one for a scheduler.</li>
+
+      <li><strong>No live dashboard.</strong> Plain text to stderr during a run and a static
+      HTML report afterwards. Deliberate, but it means no streaming view of a long run beyond
+      the progress lines, and no way to watch a single trajectory unfold.</li>
+
+      <li><strong>A task suite is only as good as its author.</strong> Caliper measures what it
+      is told to measure. Step optima and expected tool sets are human judgements about what a
+      correct trajectory looks like, and a suite that encodes a bad assumption will report
+      that assumption back with total confidence. The harness cannot tell you your suite is
+      wrong.</li>
+
+      <li><strong>Cost figures depend on the provider's reported usage.</strong> Where
+      OpenRouter returns usage accounting, Caliper uses it. Where it does not, Caliper falls
+      back to a per-model price table that will drift out of date, and prints no warning when
+      it does. Treat absolute dollar figures as indicative and relative ones as sound.</li>
+
+      <li><strong>The built-in reference agent is a fixture.</strong> It is deterministic and
+      rule-based and makes no LLM calls. Its two versions differ in routing policy, which
+      stands in for a prompt change and produces the same class of trajectory difference. The
+      measurements are real; the thing being measured is a stand-in, and a real agent will be
+      noisier across repeated runs than this one is.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== RUNNING IT LOCALLY ===================== -->
+<section>
+  <div class="wrap">
+    <p class="kicker">Running it locally</p>
+    <h2>Clone it and the benchmark reproduces.</h2>
+
+    <div class="term">
+      <div class="bar">bash</div>
+<pre><span class="p">$</span> git clone https://github.com/Manavarya09/caliper &amp;&amp; cd caliper
+<span class="p">$</span> python3.11 -m venv .venv &amp;&amp; source .venv/bin/activate
+<span class="p">$</span> pip install -r requirements.txt
+<span class="p">$</span> pip install -e .                      <span class="c"># optional, puts caliper on PATH</span>
+
+<span class="c"># Reproduce the table above. No API key needed.</span>
+<span class="p">$</span> caliper run suites/reference.yaml --agent reference-v1 --offline
+<span class="p">$</span> caliper run suites/reference.yaml --agent reference-v2 --offline
+<span class="p">$</span> caliper compare latest latest~1
+
+<span class="c"># As a CI gate. Exits 1 if any task went pass -&gt; fail.</span>
+<span class="p">$</span> caliper compare latest latest~1 --fail-on-regression
+
+<span class="c"># Inspect one trajectory step by step, or export an HTML report.</span>
+<span class="p">$</span> caliper trace latest add_two_numbers
+<span class="p">$</span> caliper report latest --against latest~1 --html report.html
+
+<span class="c"># 258 tests, all passing with no API key.</span>
+<span class="p">$</span> pytest</pre>
+    </div>
+
+    <p>Only the <code>llm_judge</code> grader and live agent runs need credentials:</p>
+
+    <div class="term">
+      <div class="bar">bash</div>
+<pre><span class="p">$</span> export OPENROUTER_API_KEY=sk-or-...    <span class="c"># or put it in .env</span>
+<span class="p">$</span> caliper run suites/strata.yaml --agent strata</pre>
+    </div>
+
+    <p>The suites for the two sibling agent projects, <code>suites/strata.yaml</code> and
+    <code>suites/quarry.yaml</code>, import their adapters lazily. If the sibling repository is
+    not on the import path the run fails with instructions for getting it there, and points
+    you back at the reference agent in the meantime.</p>
+  </div>
+</section>
+
+<!-- ======================= CLOSING BAND ========================= -->
+<div class="band">
+  <div class="wrap">
+    <h2>Measure the trajectory, not just the answer.</h2>
+    <p>The harness, the reference agent, the suites and the run files are all in the repo.</p>
+    <a class="btn btn-primary" href="https://github.com/Manavarya09/caliper">View on GitHub</a>
+  </div>
 </div>
-
-<div class="decision">
-<h3>Trajectory graders as first-class, not an add-on</h3>
-<p><span class="label">Decision</span>Half the built-in graders read the step list rather than
-the final output, and a task fails if any of its graders fail.</p>
-<p><span class="label">Why</span>Final-answer correctness is a strict subset of what matters.
-The worked example above shows two agents with identical answers and a 2.5x cost difference;
-only a trajectory grader separates them. Cost, tool discipline and error recovery are the
-properties that decide whether an agent survives contact with production traffic.</p>
-<p><span class="label">Cost</span>Trajectory graders need the suite author to supply a
-reference: <code>reference_steps</code>, <code>expected_tools</code>, a budget. That is real
-judgement work, and a badly chosen reference optimum produces a confidently wrong efficiency
-score. Writing an expected string is much easier, which is part of why most harnesses stop
-there.</p>
-</div>
-
-<div class="decision">
-<h3>Runs are files, not a database</h3>
-<p><span class="label">Decision</span>Each run is one JSON file under
-<code>.caliper/runs/</code>, written atomically. The store lists, loads and prunes.</p>
-<p><span class="label">Why</span>A run is an immutable artifact produced by CI. Files diff in a
-pull request, attach to a build, commit as a pinned baseline, and copy with <code>scp</code>.
-A database would buy indexed queries over a dataset that is almost always a few hundred rows,
-in exchange for a service to run and a schema to migrate.</p>
-<p><span class="label">Cost</span>No indexed queries, and listing a thousand runs reads a
-thousand files. One module would have to change if that tradeoff ever flipped, which is the
-point of keeping it in one module.</p>
-</div>
-
-<div class="decision">
-<h3>Regressions exit non-zero</h3>
-<p><span class="label">Decision</span><code>caliper compare --fail-on-regression</code> exits 1
-when any task went <code>pass -&gt; fail</code>, and 0 otherwise.</p>
-<p><span class="label">Why</span>A report nobody reads changes nothing; a gate that blocks a
-merge changes behaviour. Making the tool usable as a CI step is what turns an eval script into
-infrastructure.</p>
-<p><span class="label">Cost</span>The gate has to be narrow enough to be trusted, so it fires
-only on a named task that used to pass. It deliberately ignores metrics that moved the wrong
-way, and it excludes infrastructure errors in both directions, because a gate that fires on a
-rate limit is a gate the team learns to bypass. A cost regression with no correctness
-regression therefore shows in the table but does not block the merge; that call is left to the
-human reading the diff.</p>
-</div>
-
-<div class="decision">
-<h3>Deterministic output ordering under parallel execution</h3>
-<p><span class="label">Decision</span>Results are emitted in suite order regardless of which
-worker finished first, and task timeouts count execution time only, never time spent queued.</p>
-<p><span class="label">Why</span>Run files are compared by tools and read by humans. A diff
-full of reordering noise hides the one line that matters, and a task that times out because it
-waited behind three slow ones is a bug report about the harness, not about the agent.</p>
-<p><span class="label">Cost</span>The main thread polls futures rather than consuming them as
-they complete, which is marginally less efficient and is the right trade at this scale.</p>
-</div>
-
-
-<h2>Limitations</h2>
-
-<ul class="tight">
-<li><strong>LLM-judge variance is real and is not solved here.</strong> Re-grading the same
-response can land in a different bucket, especially near the boundary between "correct with a
-minor flaw" and "partially correct". Temperature 0, a fixed five-point rubric with named
-anchors, and <code>n_samples</code> majority vote with agreement reported in the score detail
-all reduce it. None of them eliminate it. A comparison that hinges entirely on a few points of
-<code>llm_judge</code> delta hinges on noise, and the deterministic graders should carry the
-weight wherever a task admits one.</li>
-
-<li><strong>No distributed execution.</strong> One process, one thread pool, one machine. That
-is adequate for a suite of a few hundred tasks and is not a replacement for a job queue. A
-suite that takes an hour on one box will take an hour.</li>
-
-<li><strong>Timed-out tasks are abandoned, not killed.</strong> Python cannot safely kill a
-thread. The result is recorded as a timeout immediately and the run proceeds, but the worker
-may still be running underneath and still holding whatever resource it was holding. This is
-the correct trade for an eval harness and the wrong one for a scheduler.</li>
-
-<li><strong>No live dashboard.</strong> Plain text to stderr during a run, and a static HTML
-report afterwards. Deliberate, but it means there is no streaming view of a long run beyond
-the progress lines, and no way to watch a single trajectory unfold.</li>
-
-<li><strong>A task suite is only as good as its author.</strong> Caliper measures what it is
-told to measure. <code>reference_steps</code> and <code>expected_tools</code> are human
-judgements about what a correct trajectory looks like, and a suite that encodes a bad
-assumption will report that assumption back with total confidence. The harness cannot tell you
-your suite is wrong.</li>
-
-<li><strong>Cost figures depend on the provider's reported usage.</strong> Where OpenRouter
-returns usage accounting, Caliper uses it. Where it does not, Caliper falls back to a
-per-model price table that will drift out of date, and no warning is printed when it does.
-Treat absolute dollar figures as indicative and relative ones as sound.</li>
-
-<li><strong>The built-in reference agent is a fixture.</strong> It is deterministic and
-rule-based and makes no LLM calls. Its two versions differ in routing policy, which stands in
-for a prompt change and produces the same class of trajectory difference. The measurements are
-real; the thing being measured is a stand-in, and a real agent will be noisier across repeated
-runs than this one is.</li>
-</ul>
-
-
-<h2>Running it locally</h2>
-
-<pre><code>git clone &lt;repo&gt; caliper &amp;&amp; cd caliper
-python3.11 -m venv .venv &amp;&amp; source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e .                      # optional, puts `caliper` on PATH
-
-# Reproduce the table at the top of this page. No API key needed.
-caliper run suites/reference.yaml --agent reference-v1 --offline
-caliper run suites/reference.yaml --agent reference-v2 --offline
-caliper compare latest latest~1
-
-# As a CI gate. Exits 1 if any task went pass -> fail.
-caliper compare latest latest~1 --fail-on-regression
-
-# Inspect one trajectory step by step.
-caliper trace latest add_two_numbers
-
-# Standalone HTML report.
-caliper report latest --against latest~1 --html report.html
-
-# Tests. 258 of them, all passing with no API key.
-pytest</code></pre>
-
-<p>Only the <code>llm_judge</code> grader and live agent runs need credentials:</p>
-
-<pre><code>export OPENROUTER_API_KEY=sk-or-...    # or put it in .env
-caliper run suites/strata.yaml --agent strata</code></pre>
-
-<p>The suites for the two sibling agent projects, <code>suites/strata.yaml</code> and
-<code>suites/quarry.yaml</code>, import their adapters lazily. If the sibling repository is
-not on the import path the run fails with instructions for getting it there, and points you
-back at the reference agent in the meantime.</p>
-
-<footer>caliper &middot; 2026</footer>
 
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>caliper &middot; 2026</span>
+    <ul>
+      <li><a href="https://github.com/Manavarya09/caliper">caliper</a></li>
+      <li><a href="https://github.com/Manavarya09/strata">strata</a></li>
+      <li><a href="https://github.com/Manavarya09/quarry">quarry</a></li>
+    </ul>
+  </div>
+</footer>
+
 </body>
 </html>
