@@ -292,6 +292,16 @@ exclusion, deterministic ordering under 1/2/8 workers, regression detection in
 both directions, the comparison table against a golden string, and store
 round-trip.
 
+## Related
+
+Part of a three-repo set on building and measuring agents:
+
+- [strata](https://github.com/Manavarya09/strata) - deep research agent (planner, hybrid
+  retrieval, reflection)
+- [quarry](https://github.com/Manavarya09/quarry) - data analyst agent (tool calls,
+  sandboxed execution, repair loop)
+- **caliper** - the measurement layer, used on both of the above
+
 ---
 
 caliper - 2026
