@@ -1,0 +1,75 @@
+# Task suite for Strata, the deep research agent.
+#
+# Strata is a separate repository. If it is not on the import path, the adapter
+# fails with instructions rather than a traceback:
+#   caliper run suites/strata.yaml --agent strata
+#
+# The tasks here grade what a research agent should be judged on: whether the
+# answer is right, whether it retrieved before it asserted, and whether the
+# reflection loop paid for itself in steps. The llm_judge tasks need
+# OPENROUTER_API_KEY; the rest do not.
+
+suite: strata
+defaults:
+  timeout_s: 240
+  difficulty: medium
+  cost_budget_usd: 0.60
+  latency_budget_s: 180
+
+tasks:
+  - id: transformer_attention_cost
+    input: "What is the time complexity of self-attention with respect to sequence length, and which two published techniques reduce it? Cite both."
+    expected: "Quadratic in sequence length. Sparse attention and linear attention reduce it."
+    grader:
+      - llm_judge: {threshold: 0.75, n_samples: 3}
+      - step_efficiency
+      - no_redundant_calls
+    expected_tools: [search, fetch]
+    reference_steps: 6
+    tags: [research, citation]
+
+  - id: retrieval_before_assertion
+    input: "Which company released the first commercially available lithium-ion battery, and in what year?"
+    expected: "Sony, 1991"
+    grader:
+      - contains_all: {terms: [Sony, "1991"]}
+      - tool_choice_precision
+    expected_tools: [search]
+    reference_steps: 4
+    tags: [research, factual]
+
+  - id: multi_hop_synthesis
+    input: "Compare the stated training compute of two open-weight model families released in the same year and explain which reported figure is less comparable and why."
+    expected: null
+    grader:
+      - llm_judge:
+          threshold: 0.75
+          criteria: "Must name two specific model families, give a compute figure for each, and identify a concrete reason the figures are not directly comparable."
+      - step_efficiency
+    expected_tools: [search, fetch]
+    reference_steps: 8
+    difficulty: hard
+    tags: [research, synthesis]
+
+  - id: refuses_unanswerable
+    input: "What was the exact revenue of a privately held company that has never disclosed financials?"
+    expected: "cannot be determined from public sources"
+    grader:
+      - llm_judge:
+          threshold: 0.75
+          criteria: "Must decline to state a figure and say why. Any specific revenue number is a fabrication and scores zero."
+      - cost_budget
+    reference_steps: 3
+    difficulty: hard
+    tags: [research, refusal]
+
+  - id: recovers_from_dead_source
+    input: "Summarise the key claim of a source that is likely to be unavailable, falling back to a secondary source if needed."
+    expected: null
+    grader:
+      - recovered_from_error
+      - completed
+    expected_tools: [fetch, search]
+    reference_steps: 5
+    difficulty: hard
+    tags: [research, recovery]

@@ -1,0 +1,92 @@
+# Task suite for Quarry, the data analyst agent.
+#
+# Quarry is a separate repository. If it is not on the import path, the adapter
+# fails with instructions rather than a traceback:
+#   caliper run suites/quarry.yaml --agent quarry
+#
+# An analyst agent is graded on the number it produces AND on how it got there:
+# whether it executed code instead of guessing, whether its repair loop
+# converged, and whether it re-ran identical queries.
+
+suite: quarry
+defaults:
+  timeout_s: 180
+  difficulty: medium
+  cost_budget_usd: 0.40
+  latency_budget_s: 120
+
+tasks:
+  - id: row_count
+    input: "How many rows are in the orders table?"
+    expected: "1000"
+    grader:
+      - numeric_tolerance: {abs: 0.5}
+      - tool_choice_precision
+      - step_efficiency
+    expected_tools: [run_python]
+    reference_steps: 3
+    difficulty: easy
+    tags: [sql, basic]
+
+  - id: group_by_revenue
+    input: "What is total revenue by region? Return the highest region and its total."
+    expected: null
+    grader:
+      - json_schema_match:
+          schema:
+            type: object
+            required: [region, total]
+            properties:
+              region: {type: string}
+              total: {type: number}
+      - no_redundant_calls
+    expected_tools: [run_python]
+    reference_steps: 4
+    tags: [sql, aggregation]
+
+  - id: join_three_tables
+    input: "Join orders, customers and regions, then report average order value for customers in the top region by order count."
+    expected: null
+    grader:
+      - numeric_tolerance: {rel: 0.01}
+      - step_efficiency
+      - no_redundant_calls
+    expected_tools: [run_python]
+    reference_steps: 5
+    difficulty: hard
+    tags: [sql, join]
+
+  - id: null_handling_edge
+    input: "Compute the mean of the discount column, which contains nulls. State how nulls were handled."
+    expected: null
+    grader:
+      - llm_judge:
+          threshold: 0.75
+          criteria: "Must give a mean AND explicitly state whether nulls were dropped or treated as zero. Giving only a number scores at most 0.5."
+      - completed
+    expected_tools: [run_python]
+    reference_steps: 4
+    difficulty: hard
+    tags: [sql, edge]
+
+  - id: repair_loop_converges
+    input: "Compute a metric whose first natural implementation raises a type error, then correct it."
+    expected: null
+    grader:
+      - recovered_from_error
+      - step_efficiency
+      - cost_budget
+    expected_tools: [run_python]
+    reference_steps: 5
+    difficulty: hard
+    tags: [repair, recovery]
+
+  - id: no_guessing_without_execution
+    input: "What is the median order value? Do not estimate."
+    expected: null
+    grader:
+      - tool_choice_precision
+      - completed
+    expected_tools: [run_python]
+    reference_steps: 3
+    tags: [discipline]
