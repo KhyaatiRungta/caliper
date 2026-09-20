@@ -129,8 +129,16 @@ def _execute_one(
     task: Task,
     retries: int,
     grader_overrides: dict[str, dict],
+    started_at: dict[str, float] | None = None,
 ) -> RunResult:
-    """Run and grade one task inside a worker thread. Never raises."""
+    """Run and grade one task inside a worker thread. Never raises.
+
+    ``started_at`` is written the moment the worker picks the task up, so the
+    main thread can enforce a timeout over EXECUTION time and not over time
+    spent queued behind other tasks.
+    """
+    if started_at is not None:
+        started_at[task.id] = time.time()
     attempt = 0
     while True:
         attempt += 1
@@ -199,15 +207,15 @@ def run_suite(
     results: dict[str, RunResult] = {}
     executor = ThreadPoolExecutor(max_workers=max(1, workers))
     try:
+        exec_started: dict[str, float] = {}
         futures = {
-            executor.submit(_execute_one, adapter, task, retries, overrides): task
+            executor.submit(_execute_one, adapter, task, retries, overrides, exec_started): task
             for task in tasks
         }
-        deadline_map = {f: time.time() + max(0.1, t.timeout_s) for f, t in futures.items()}
         for future, task in futures.items():
-            remaining = max(0.0, deadline_map[future] - time.time())
+            budget = max(0.05, task.timeout_s)
             try:
-                result = future.result(timeout=remaining)
+                result = _await_with_timeout(future, task, exec_started, budget)
             except FutureTimeout:
                 future.cancel()
                 result = _failed_result(
@@ -244,6 +252,26 @@ def run_suite(
     if save:
         (store or RunStore()).save(run)
     return run
+
+
+_POLL_S = 0.02
+
+
+def _await_with_timeout(
+    future, task: Task, exec_started: dict[str, float], budget: float
+) -> RunResult:
+    """Wait for ``future``, counting only time after the worker began the task.
+
+    Raises :class:`FutureTimeout` when the task has been executing for longer
+    than its budget. Time spent waiting in the executor queue does not count.
+    """
+    while True:
+        try:
+            return future.result(timeout=_POLL_S)
+        except FutureTimeout:
+            begun = exec_started.get(task.id)
+            if begun is not None and (time.time() - begun) > budget:
+                raise
 
 
 def _safe_div(numer: float, denom: float, default: float = 0.0) -> float:
