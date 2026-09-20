@@ -1,11 +1,11 @@
 {
-  "run_id": "20260920-190302-reference-agent-v1-avnr",
+  "run_id": "20260920-191052-reference-agent-v1-98v7",
   "suite": "reference",
   "agent_name": "reference-agent",
   "agent_version": "v1",
   "model": "deterministic/reference",
-  "started_at": 1789930982.437037,
-  "finished_at": 1789930985.154171,
+  "started_at": 1789931452.917197,
+  "finished_at": 1789931455.626266,
   "results": [
     {
       "task": {
@@ -113,7 +113,7 @@
         "final_output": "42",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5078048706054688,
+        "wall_time_s": 0.5070679187774658,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -247,7 +247,7 @@
         "final_output": "627",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5076069831848145,
+        "wall_time_s": 0.5063550472259521,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -373,7 +373,7 @@
         "final_output": "437",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5072510242462158,
+        "wall_time_s": 0.5058927536010742,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -499,7 +499,7 @@
         "final_output": "12",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5077900886535645,
+        "wall_time_s": 0.5075991153717041,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -626,7 +626,7 @@
         "final_output": "36",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5095040798187256,
+        "wall_time_s": 0.5057389736175537,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -760,7 +760,7 @@
         "final_output": "169",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5089783668518066,
+        "wall_time_s": 0.5068678855895996,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -780,7 +780,7 @@
         },
         {
           "name": "latency_budget",
-          "value": 0.8841240204046262,
+          "value": 0.887805309418154,
           "unit": "seconds",
           "passed": false,
           "detail": "0.51s against budget 0.45s"
@@ -893,7 +893,7 @@
         "final_output": "3.14286",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5093898773193359,
+        "wall_time_s": 0.50531005859375,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -968,7 +968,7 @@
         "final_output": "Paris",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.22769618034362793,
+        "wall_time_s": 0.2300550937652588,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1052,7 +1052,7 @@
         "final_output": "Nairobi",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.22978687286376953,
+        "wall_time_s": 0.22266221046447754,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1125,7 +1125,7 @@
         "final_output": "Pacific Ocean",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.22878003120422363,
+        "wall_time_s": 0.22441387176513672,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1141,7 +1141,7 @@
           "value": 1.0,
           "unit": "seconds",
           "passed": true,
-          "detail": "0.23s against budget 0.45s"
+          "detail": "0.22s against budget 0.45s"
         }
       ],
       "passed": true,
@@ -1210,7 +1210,7 @@
         "final_output": "Nile",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.22394084930419922,
+        "wall_time_s": 0.23026204109191895,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1288,7 +1288,7 @@
         "final_output": "299792458 m/s",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.22844958305358887,
+        "wall_time_s": 0.23024988174438477,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1399,7 +1399,7 @@
         "final_output": null,
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39544200897216797,
+        "wall_time_s": 0.3945279121398926,
         "terminated_reason": "error"
       },
       "scores": [
@@ -1472,7 +1472,7 @@
         "final_output": "yen",
         "total_cost_usd": 0.018,
         "total_tokens": 3520,
-        "wall_time_s": 0.23010468482971191,
+        "wall_time_s": 0.22712302207946777,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1586,7 +1586,7 @@
         "final_output": "repilac",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39779186248779297,
+        "wall_time_s": 0.39255714416503906,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1699,7 +1699,7 @@
         "final_output": "REGRESSION",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.3922760486602783,
+        "wall_time_s": 0.3890197277069092,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1812,7 +1812,7 @@
         "final_output": "5",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39544129371643066,
+        "wall_time_s": 0.3931560516357422,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -1924,7 +1924,7 @@
         "final_output": "Trajectory Grading",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39879918098449707,
+        "wall_time_s": 0.3911411762237549,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2033,7 +2033,7 @@
         "final_output": ".napaJ fo latipac eht esreveR",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.38777589797973633,
+        "wall_time_s": 0.39328789710998535,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2154,7 +2154,7 @@
         "final_output": "GIVE THE CAPITAL OF BRAZIL IN UPPERCASE.",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39124083518981934,
+        "wall_time_s": 0.3893618583679199,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2269,7 +2269,7 @@
         "final_output": null,
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.3963510990142822,
+        "wall_time_s": 0.39376211166381836,
         "terminated_reason": "error"
       },
       "scores": [
@@ -2403,7 +2403,7 @@
         "final_output": "-6",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.5096011161804199,
+        "wall_time_s": 0.503007173538208,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2517,7 +2517,7 @@
         "final_output": "8",
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.39161109924316406,
+        "wall_time_s": 0.3912038803100586,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2626,7 +2626,7 @@
         "final_output": null,
         "total_cost_usd": 0.036,
         "total_tokens": 7040,
-        "wall_time_s": 0.3965461254119873,
+        "wall_time_s": 0.3889918327331543,
         "terminated_reason": "error"
       },
       "scores": [
@@ -2756,7 +2756,7 @@
         "final_output": "25",
         "total_cost_usd": 0.045,
         "total_tokens": 8800,
-        "wall_time_s": 0.511833906173706,
+        "wall_time_s": 0.5118341445922852,
         "terminated_reason": "completed"
       },
       "scores": [
@@ -2793,9 +2793,9 @@
     "total_cost_usd": 0.8730000000000003,
     "cost_per_task": 0.034920000000000014,
     "total_tokens": 170720,
-    "latency_mean": 0.3956717586517334,
-    "latency_p95": 0.5096011161804199,
-    "wall_time_s": 2.7171339988708496,
+    "latency_mean": 0.3936579513549805,
+    "latency_p95": 0.5075991153717041,
+    "wall_time_s": 2.709069013595581,
     "tool_calls": 78,
     "tool_error_rate": 0.6025641025641025,
     "graders": {
@@ -2837,9 +2837,9 @@
       "latency_budget": {
         "n": 2.0,
         "passed": 1.0,
-        "value_sum": 1.8841240204046263,
+        "value_sum": 1.887805309418154,
         "pass_rate": 0.5,
-        "mean_value": 0.9420620102023132
+        "mean_value": 0.943902654709077
       },
       "exact_match": {
         "n": 9.0,

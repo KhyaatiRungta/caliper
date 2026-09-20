@@ -1,6 +1,6 @@
 {
-  "candidate": "20260920-190305-reference-agent-v2-geal",
-  "baseline": "20260920-190302-reference-agent-v1-avnr",
+  "candidate": "20260920-191055-reference-agent-v2-v2tn",
+  "baseline": "20260920-191052-reference-agent-v1-98v7",
   "metrics": [
     {
       "label": "task success",
@@ -22,9 +22,9 @@
     },
     {
       "label": "p95 latency",
-      "after": 0.2831242084503174,
-      "before": 0.5096011161804199,
-      "delta": -0.22647690773010254
+      "after": 0.278656005859375,
+      "before": 0.5075991153717041,
+      "delta": -0.2289431095123291
     },
     {
       "label": "tool-error rate",

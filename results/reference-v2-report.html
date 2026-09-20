@@ -91,7 +91,7 @@ footer a:hover { color: var(--fg); }
 </style></head><body><main>
 <p class="eyebrow">Caliper run report</p>
 <h1>reference / reference-agent v2</h1>
-<p class="sub">run 20260920-190305-reference-agent-v2-geal &middot; 2026-09-20 19:03 UTC &middot; model deterministic/reference</p>
+<p class="sub">run 20260920-191055-reference-agent-v2-v2tn &middot; 2026-09-20 19:10 UTC &middot; model deterministic/reference</p>
 <div class="metrics">
 <div class="metric"><span class="fig">92.0%</span><span class="lbl">task success</span></div>
 <div class="metric"><span class="fig">2.0</span><span class="lbl">steps (median)</span></div>
@@ -99,13 +99,13 @@ footer a:hover { color: var(--fg); }
 <div class="metric"><span class="fig">6.7%</span><span class="lbl">tool-error rate</span></div>
 </div>
 <h2>Comparison against v1</h2>
-<div class="term"><div class="bar">caliper compare 20260920-190305-reference-agent-v2-geal 20260920-190302-reference-agent-v1-avnr</div>
+<div class="term"><div class="bar">caliper compare 20260920-191055-reference-agent-v2-v2tn 20260920-191052-reference-agent-v1-98v7</div>
 <pre>SUITE: reference-agent v2   vs   v1
 -------------------------------------------
 task success      92.0%      36.0%   +56.0
 steps (median)      2.0        4.0    -2.0
 cost / task      $0.020     $0.035    -43%
-p95 latency        0.3s       0.5s    -44%
+p95 latency        0.3s       0.5s    -45%
 tool-error rate    6.7%      60.3%   -53.6
 
 REGRESSIONS (0)
@@ -169,16 +169,16 @@ FIXES (14)
 <tr><td class='mono pass'>pass</td><td class='mono'>largest_ocean</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>longest_river</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>speed_of_light</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
-<tr><td class='mono fail'>fail</td><td class='mono'>seconds_in_a_day</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.16s</td><td>numeric_tolerance: could not parse a number (expected=86400.0, got=None)</td></tr>
+<tr><td class='mono fail'>fail</td><td class='mono'>seconds_in_a_day</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td>numeric_tolerance: could not parse a number (expected=86400.0, got=None)</td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>currency_of_japan</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>reverse_literal</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>uppercase_literal</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>word_count_literal</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
-<tr><td class='mono pass'>pass</td><td class='mono'>title_case_literal</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.16s</td><td></td></tr>
+<tr><td class='mono pass'>pass</td><td class='mono'>title_case_literal</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>reverse_looked_up_fact</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.28s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>uppercase_looked_up_fact</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.28s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>arithmetic_over_fact</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.28s</td><td></td></tr>
-<tr><td class='mono pass'>pass</td><td class='mono'>days_in_leap_year_minus_one</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.29s</td><td></td></tr>
+<tr><td class='mono pass'>pass</td><td class='mono'>days_in_leap_year_minus_one</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.28s</td><td></td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>word_count_of_fact</td><td class='num mono'>3</td><td class='num mono'>$0.0270</td><td class='num mono'>0.28s</td><td></td></tr>
 <tr><td class='mono fail'>fail</td><td class='mono'>unknown_fact_recovery</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td>completed: terminated_reason=error</td></tr>
 <tr><td class='mono pass'>pass</td><td class='mono'>json_shape_check</td><td class='num mono'>2</td><td class='num mono'>$0.0180</td><td class='num mono'>0.17s</td><td></td></tr>
