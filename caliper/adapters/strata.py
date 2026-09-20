@@ -8,6 +8,12 @@ stays clean, and Caliper stays able to measure agents it was not designed for.
 
 The import is lazy and the failure message is actionable, because a missing
 sibling repository is the normal case for someone who cloned only Caliper.
+
+Status: provisional. Strata is being written in parallel with Caliper, so this
+adapter binds to whichever conventional entry point that repo exposes and
+tolerates several shapes of trace. It will be pinned to one once the sibling
+API settles. The reference agent, not this adapter, is what the test suite
+guarantees.
 """
 
 from __future__ import annotations
@@ -86,6 +92,50 @@ def _import_sibling(module: str, env_var: str, default_dir: str, repo: str):
     )
 
 
+def _construct(factory, kwargs: dict, where: str):
+    """Build the sibling agent, turning a signature mismatch into guidance.
+
+    The sibling repos own their own constructors and are still moving. When the
+    zero-argument call does not fit, say exactly that rather than surfacing a
+    bare TypeError from someone else's code.
+    """
+    try:
+        return factory(**kwargs)
+    except TypeError as exc:
+        import inspect
+
+        try:
+            signature = str(inspect.signature(factory))
+        except (TypeError, ValueError):
+            signature = "(unavailable)"
+        raise SiblingMissing(
+            f"Could not construct the {where} agent: {exc}\n"
+            f"Its constructor signature is {signature}.\n"
+            "This adapter builds the agent with no arguments by default. Pass the "
+            "wiring it needs by constructing the adapter yourself:\n"
+            f"  from caliper.adapters.{where} import build\n"
+            f"  agent = build(retriever=..., client=...)\n"
+            "and register it with --agent yourmodule:yourfactory."
+        ) from exc
+
+
+def _resolve_entry_point(module: Any, names: tuple[str, ...], where: str):
+    """First attribute of ``module`` named in ``names``, else a clear error."""
+    for name in names:
+        factory = getattr(module, name, None)
+        if factory is not None:
+            return factory
+    available = ", ".join(n for n in dir(module) if not n.startswith("_"))[:200]
+    raise SiblingMissing(
+        f"{where} exposes none of {', '.join(names)}, so Caliper does not know how "
+        "to construct the agent.\n"
+        f"What it does expose: {available}\n"
+        "Fix by adding a build() factory to that module, or point Caliper at the "
+        "right callable directly:\n"
+        f"  caliper run suites/... --agent {where}:YourAgentClass"
+    )
+
+
 def _steps_from(raw: Any) -> list[dict]:
     """Accept several plausible shapes of a sibling's trace.
 
@@ -113,15 +163,15 @@ class StrataAdapter:
         self._kwargs = kwargs
         self._agent = None
 
+    #: Entry points tried in order. Strata is a separate project being written in
+    #: parallel, so the adapter accepts any of the conventional names rather than
+    #: dictating one to a repo that does not depend on Caliper.
+    ENTRY_POINTS = ("build", "StrataAgent", "ResearchAgent", "Agent")
+
     def setup(self) -> None:
         module = _import_sibling("strata.agent", "STRATA_HOME", "strata", "Strata")
-        factory = getattr(module, "build", None) or getattr(module, "ResearchAgent", None)
-        if factory is None:
-            raise SiblingMissing(
-                "strata.agent exposes neither build() nor ResearchAgent; "
-                "Caliper expects one of them as the entry point."
-            )
-        self._agent = factory(**self._kwargs)
+        factory = _resolve_entry_point(module, self.ENTRY_POINTS, "strata.agent")
+        self._agent = _construct(factory, self._kwargs, "strata")
 
     def run(self, task: Task) -> Trajectory:
         if self._agent is None:

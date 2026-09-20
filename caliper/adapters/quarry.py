@@ -8,6 +8,8 @@ stays clean, and Caliper stays able to measure agents it was not designed for.
 
 The import is lazy and the failure message is actionable, because a missing
 sibling repository is the normal case for someone who cloned only Caliper.
+
+Status: provisional, for the same reason as the Strata adapter. See that module.
 """
 
 from __future__ import annotations
@@ -21,7 +23,12 @@ from caliper.adapter import TrajectoryRecorder
 from caliper.types import Task, Trajectory
 
 
-from caliper.adapters.strata import SiblingMissing, _import_sibling  # noqa: F401
+from caliper.adapters.strata import (  # noqa: F401
+    SiblingMissing,
+    _construct,
+    _import_sibling,
+    _resolve_entry_point,
+)
 
 
 def _steps_from(raw: Any) -> list[dict]:
@@ -51,15 +58,13 @@ class QuarryAdapter:
         self._kwargs = kwargs
         self._agent = None
 
+    #: Entry points tried in order. See the note in the Strata adapter.
+    ENTRY_POINTS = ("build", "QuarryAgent", "AnalystAgent", "Agent")
+
     def setup(self) -> None:
         module = _import_sibling("quarry.agent", "QUARRY_HOME", "quarry", "Quarry")
-        factory = getattr(module, "build", None) or getattr(module, "AnalystAgent", None)
-        if factory is None:
-            raise SiblingMissing(
-                "quarry.agent exposes neither build() nor AnalystAgent; "
-                "Caliper expects one of them as the entry point."
-            )
-        self._agent = factory(**self._kwargs)
+        factory = _resolve_entry_point(module, self.ENTRY_POINTS, "quarry.agent")
+        self._agent = _construct(factory, self._kwargs, "quarry")
 
     def run(self, task: Task) -> Trajectory:
         if self._agent is None:

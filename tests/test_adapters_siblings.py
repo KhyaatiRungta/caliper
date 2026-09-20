@@ -59,6 +59,50 @@ def test_adapter_construction_does_not_import_anything():
     assert adapter._agent is None
 
 
+def test_entry_point_resolution_prefers_build():
+    from caliper.adapters.strata import _resolve_entry_point
+
+    class Mod:
+        build = "the-factory"
+        StrataAgent = "the-class"
+
+    assert _resolve_entry_point(Mod, ("build", "StrataAgent"), "x") == "the-factory"
+
+
+def test_entry_point_resolution_falls_back_to_the_class():
+    from caliper.adapters.strata import _resolve_entry_point
+
+    class Mod:
+        StrataAgent = "the-class"
+
+    assert _resolve_entry_point(Mod, ("build", "StrataAgent"), "x") == "the-class"
+
+
+def test_missing_entry_point_lists_what_the_module_does_expose():
+    from caliper.adapters.strata import _resolve_entry_point
+
+    class Mod:
+        SomethingElse = 1
+
+    with pytest.raises(SiblingMissing) as exc:
+        _resolve_entry_point(Mod, ("build",), "strata.agent")
+    assert "SomethingElse" in str(exc.value)
+
+
+def test_constructor_mismatch_reports_the_signature():
+    """A sibling whose constructor needs wiring gets guidance, not a TypeError."""
+    from caliper.adapters.strata import _construct
+
+    def factory(retriever, client):
+        return object()
+
+    with pytest.raises(SiblingMissing) as exc:
+        _construct(factory, {}, "strata")
+    message = str(exc.value)
+    assert "retriever" in message
+    assert "--agent yourmodule:yourfactory" in message
+
+
 def test_registry_lists_the_builtins():
     assert {"reference-v1", "reference-v2", "strata", "quarry"} <= set(available())
 
