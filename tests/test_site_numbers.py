@@ -44,7 +44,10 @@ def test_metric_strip_figures_come_from_the_comparison_json(site):
 def test_grader_count_on_the_site_matches_the_registry(site):
     from caliper.graders import registered
 
-    assert f'<span class="fig">{len(registered())}</span>' in site
+    # Other test modules register throwaway graders under a leading underscore;
+    # the site quotes the count of shipped ones.
+    shipped = [n for n in registered() if not n.startswith("_")]
+    assert f'<span class="fig">{len(shipped)}</span>' in site
 
 
 def test_site_has_no_author_byline(site):
